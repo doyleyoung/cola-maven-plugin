@@ -60,7 +60,7 @@ public class InjectorClassVisitor extends ClassVisitor {
         mv.visitLdcInsn(scenario.getName());
         mv.visitLdcInsn(story);
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitMethodInsn(INVOKESTATIC, "com/github/bmsantos/maven/cola/processor/StoryProcessor", "process", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;)V", false);
+        mv.visitMethodInsn(INVOKESTATIC, "com/github/bmsantos/maven/cola/story/processor/StoryProcessor", "process", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;)V", false);
         mv.visitInsn(RETURN);
         mv.visitAnnotation("Lorg/junit/Test;", true);
         mv.visitEnd();

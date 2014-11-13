@@ -1,40 +1,94 @@
 package com.github.bmsantos.maven.cola;
 
-import com.github.bmsantos.maven.cola.annotations.Given;
-import com.github.bmsantos.maven.cola.annotations.Then;
-import com.github.bmsantos.maven.cola.annotations.When;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.github.bmsantos.maven.cola.story.annotations.Given;
+import com.github.bmsantos.maven.cola.story.annotations.Then;
+import com.github.bmsantos.maven.cola.story.annotations.When;
 
 public class ColaTest extends BaseColaTest {
-    
+
     private final String stories =
-            "Feature: Introduce addition\n" +
-                    "Scenario: Should add two numbers\n" +
-                    "Given A\n" +
-                    "When added to B\n" +
-                    "Then the result is A + B\n" +
-                    "\n" +
-                    "Scenario: Should add two numbers again\n" +
-                    "Given C as A\n" +
-                    "When added to B\n" +
-                    "Then the result is A + B";
-    
+        "Feature: Introduce addition\n"
+            + "Scenario: Should add two numbers\n"
+            + "Given A\n"
+            + "And B\n"
+            + "When added together\n"
+            + "Then the result will be addition of both numbers\n"
+            + "\n"
+            + "Scenario: Should add two numbers again\n"
+            + "Given A\n"
+            + "And C\n"
+            + "When added together\n"
+            + "And subtracted by C\n"
+            + "Then the result will be A\n"
+            + "But C will be C\n"
+            + "And A will be A";
+
+    public List<String> executionOrder = new ArrayList<>();
+
     @Given("A")
-    public void given() {
-        System.out.println("\tCalled: Given A");
+    public void givenA() {
+        assertThat(executionOrder.isEmpty(), is(true));
+
+        executionOrder.add(Thread.currentThread().getStackTrace()[1].getMethodName());
     }
-    
-    @Given("C as A")
-    public void givenCasA() {
-        System.out.println("\tCalled: Given C as A");
+
+    @Given("B")
+    public void givenB() {
+        assertThat(executionOrder.get(executionOrder.size() - 1), is("givenA"));
+
+        executionOrder.add(Thread.currentThread().getStackTrace()[1].getMethodName());
     }
-    
-    @When("added to B")
-    public void when() {
-        System.out.println("\tCalled: When added to B");
+
+    @Given("C")
+    public void givenC() {
+        assertThat(executionOrder.get(executionOrder.size() - 1), is("givenA"));
+
+        executionOrder.add(Thread.currentThread().getStackTrace()[1].getMethodName());
     }
-    
-    @Then("the result is A + B")
-    public void then() {
-        System.out.println("\tCalled: Then the result is A + B");
+
+    @When("added together")
+    public void whenA() {
+        executionOrder.add(Thread.currentThread().getStackTrace()[1].getMethodName());
+    }
+
+    @When("subtracted by C")
+    public void whenB() {
+        assertThat(executionOrder.get(executionOrder.size() - 1), is("whenA"));
+
+        executionOrder.add(Thread.currentThread().getStackTrace()[1].getMethodName());
+    }
+
+    @Then("the result will be addition of both numbers")
+    public void thenA() {
+        assertThat(executionOrder.get(executionOrder.size() - 1), is("whenA"));
+
+        executionOrder.add(Thread.currentThread().getStackTrace()[1].getMethodName());
+    }
+
+    @Then("the result will be A")
+    public void thenB() {
+        assertThat(executionOrder.get(executionOrder.size() - 1), is("whenB"));
+
+        executionOrder.add(Thread.currentThread().getStackTrace()[1].getMethodName());
+    }
+
+    @Then("C will be C")
+    public void thenC() {
+        assertThat(executionOrder.get(executionOrder.size() - 1), is("thenB"));
+
+        executionOrder.add(Thread.currentThread().getStackTrace()[1].getMethodName());
+    }
+
+    @Then("A will be A")
+    public void thenD() {
+        assertThat(executionOrder.get(executionOrder.size() - 1), is("thenC"));
+
+        executionOrder.add(Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

@@ -1,4 +1,4 @@
-package com.github.bmsantos.maven.cola.annotations;
+package com.github.bmsantos.maven.cola.story.annotations;
 
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

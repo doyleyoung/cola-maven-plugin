@@ -36,7 +36,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
@@ -46,10 +45,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>com.github.bmsantos</groupId>
-				<artifactId>cola-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -82,62 +77,31 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>com.github.bmsantos</groupId>
+				<artifactId>cola-maven-plugin</artifactId>
+				<version>${project.version}</version>
+				<configuration>
+					<ideBaseClass>com.github.bmsantos.maven.cola.BaseColaTest</ideBaseClass>
+					<ideBaseClassTest>iWillBeRemoved</ideBaseClassTest>
+					<includes>
+						<include>**/ColaTest.class</include>
+					</includes>
+					<excludes>
+						<exclude>**/ExcludedTest.class</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>compile-cola-tests</id>
+						<phase>process-test-classes</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>com.github.bmsantos</groupId>
-					<artifactId>cola-maven-plugin</artifactId>
-					<version>${project.version}</version>
-					<configuration>
-						<ideBaseClass>com.github.bmsantos.maven.cola.BaseColaTest</ideBaseClass>
-						<ideBaseClassTest>iWillBeRemoved</ideBaseClassTest>
-						<includes>
-							<include>**/ColaTest.class</include>
-						</includes>
-						<excludes>
-							<exclude>**/ExcludedTest.class</exclude>
-						</excludes>
-					</configuration>
-					<executions>
-						<execution>
-							<id>compile-cola-tests</id>
-							<phase>process-test-classes</phase>
-							<goals>
-								<goal>compile</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>com.github.bmsantos</groupId>
-										<artifactId>cola-maven-plugin</artifactId>
-										<versionRange>[0.0.1-SNAPSHOT,)</versionRange>
-										<goals>
-											<goal>compile</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<execute>
-											<runOnIncremental>false</runOnIncremental>
-											<runOnConfiguration>true</runOnConfiguration>
-										</execute>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 	</build>
 
 </project>

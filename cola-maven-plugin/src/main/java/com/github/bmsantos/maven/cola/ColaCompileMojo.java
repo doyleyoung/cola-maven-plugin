@@ -58,7 +58,6 @@ public class ColaCompileMojo extends BaseColaMojo {
             validateIdeBaseClass();
             processIdeBaseClass(classes);
 
-
             for (final String className : classes) {
                 final ClassWriter classWritter = new ClassWriter(COMPUTE_MAXS);
                 final InjectorClassVisitor injectorClassVisitor = new InjectorClassVisitor(ASM4, classWritter);
