@@ -1,4 +1,4 @@
-package com.github.bmsantos.maven.cola.injector;
+package com.github.bmsantos.maven.cola.formatter;
 
 import static java.lang.System.err;
 import gherkin.formatter.Formatter;
@@ -11,71 +11,103 @@ import gherkin.formatter.model.Step;
 import gherkin.parser.Parser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class StoryFormatter implements Formatter {
+import com.github.bmsantos.maven.cola.exceptions.InvalidFeature;
+import com.github.bmsantos.maven.cola.exceptions.InvalidFeatureUri;
 
+public class FeatureFormatter implements Formatter {
+
+    private FeatureDetails currentFeature;
     private Scenario currentScenario;
-    private final Map<Scenario, List<Step>> scenarios = new HashMap<Scenario, List<Step>>();
 
-    public static Map<Scenario, List<Step>> parse(final String feature) {
-        final StoryFormatter formatter = new StoryFormatter();
+    public static FeatureDetails parse(final String feature, final String fromUri) {
+        if (feature == null || feature.isEmpty()) {
+            throw new InvalidFeature("Feature is null or empty.");
+        }
+
+        if (fromUri == null || fromUri.isEmpty()) {
+            throw new InvalidFeatureUri("Feature URI is null or empty.");
+        }
+
+        final FeatureFormatter formatter = new FeatureFormatter();
         final Parser parser = new Parser(formatter, false);
 
-        parser.parse(feature, "/Foo/Test/URI", 0);
+        parser.parse(feature, fromUri, 0);
 
-        return formatter.getScenarios();
+        return formatter.getFeature();
     }
 
-    public Map<Scenario, List<Step>> getScenarios() {
-        return scenarios;
+    public FeatureDetails getFeature() {
+        return currentFeature;
     }
 
+    @Override
     public void syntaxError(final String state, final String event,
-            final List<String> legalEvents, final String uri, final Integer line) {
+        final List<String> legalEvents, final String uri, final Integer line) {
         out(state, event, legalEvents, uri, line);
         err.println("Story syntax error in line " + line);
     }
 
+    @Override
     public void uri(final String uri) {
+        currentFeature = new FeatureDetails(uri);
     }
 
+    @Override
     public void feature(final Feature feature) {
+        currentFeature.setFeature(feature);
     }
 
+    @Override
     public void scenarioOutline(final ScenarioOutline scenarioOutline) {
+        // empty
     }
 
+    @Override
     public void examples(final Examples examples) {
+        // empty
     }
 
+    @Override
     public void startOfScenarioLifeCycle(final Scenario scenario) {
+        // empty
     }
 
+    @Override
     public void background(final Background background) {
+        // empty
     }
 
+    @Override
     public void scenario(final Scenario scenario) {
-        scenarios.put(scenario, new ArrayList<Step>());
+        currentFeature.getScenarios().put(scenario, new ArrayList<Step>());
         currentScenario = scenario;
     }
 
+    @Override
     public void step(final Step step) {
-        scenarios.get(currentScenario).add(step);
+        currentFeature.getScenarios().get(currentScenario).add(step);
     }
 
+    @Override
     public void endOfScenarioLifeCycle(final Scenario scenario) {
+        // empty
     }
 
+    @Override
     public void done() {
+        // empty
     }
 
+    @Override
     public void close() {
+        // empty
     }
 
+    @Override
     public void eof() {
+        // empty
     }
 
     private void out(final Object... values) {

@@ -21,11 +21,11 @@ public class StoryProcessor {
 
     private static final List<String> fillers = asList("And", "But");
 
-    public static void process(final String scenario, final String story, final Object instance)
+    public static void process(final String feature, final String scenario, final String story, final Object instance)
         throws IllegalAccessException, IllegalArgumentException,
         InvocationTargetException {
 
-        log.info("Scenario: " + scenario);
+        log.info("Feature: " + feature + " - Scenario: " + scenario);
 
         final Method[] methods = instance.getClass().getMethods();
         final String[] lines = story.split(NEW_LINE);

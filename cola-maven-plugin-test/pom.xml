@@ -41,6 +41,20 @@
 	</dependencies>
 
 	<build>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</testResource>
+			<testResource>
+				<directory>src/test/java</directory>
+				<includes>
+					<include>**/*.feature</include>
+				</includes>
+			</testResource>
+		</testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -85,7 +99,7 @@
 					<ideBaseClass>com.github.bmsantos.maven.cola.BaseColaTest</ideBaseClass>
 					<ideBaseClassTest>iWillBeRemoved</ideBaseClassTest>
 					<includes>
-						<include>**/ColaTest.class</include>
+						<include>**/*Test.class</include>
 					</includes>
 					<excludes>
 						<exclude>**/ExcludedTest.class</exclude>

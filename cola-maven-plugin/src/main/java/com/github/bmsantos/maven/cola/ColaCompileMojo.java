@@ -1,5 +1,6 @@
 package com.github.bmsantos.maven.cola;
 
+import static com.github.bmsantos.maven.cola.formatter.FeaturesLoader.loadFeaturesFrom;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_TEST_CLASSES;
 import static org.apache.maven.plugins.annotations.ResolutionScope.COMPILE;
 import static org.objectweb.asm.ClassWriter.COMPUTE_MAXS;
@@ -20,6 +21,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 
+import com.github.bmsantos.maven.cola.formatter.FeatureDetails;
 import com.github.bmsantos.maven.cola.injector.InjectorClassVisitor;
 import com.github.bmsantos.maven.cola.injector.MethodRemoverClassVisitor;
 
@@ -43,7 +45,8 @@ import com.github.bmsantos.maven.cola.injector.MethodRemoverClassVisitor;
 /**
  * @description Process BDD scenarios and inject JUnit tests into Cola Tests.
  */
-@Mojo(name = "compile", requiresProject = true, threadSafe = false, requiresDependencyResolution = COMPILE, defaultPhase = PROCESS_TEST_CLASSES)
+@Mojo(name = "compile", requiresProject = true, threadSafe = false, requiresDependencyResolution = COMPILE,
+defaultPhase = PROCESS_TEST_CLASSES)
 public class ColaCompileMojo extends BaseColaMojo {
 
     private ClassLoader classLoader;
@@ -59,8 +62,11 @@ public class ColaCompileMojo extends BaseColaMojo {
             processIdeBaseClass(classes);
 
             for (final String className : classes) {
+                final Class<?> annotatedClass = classLoader.loadClass(className.replace(".class", "").replace("/", "."));
+                final List<FeatureDetails> featureList = loadFeaturesFrom(annotatedClass);
+
                 final ClassWriter classWritter = new ClassWriter(COMPUTE_MAXS);
-                final InjectorClassVisitor injectorClassVisitor = new InjectorClassVisitor(ASM4, classWritter);
+                final InjectorClassVisitor injectorClassVisitor = new InjectorClassVisitor(ASM4, classWritter, featureList);
                 processClass(className, classWritter, injectorClassVisitor);
             }
         } catch (final MalformedURLException e) {
@@ -76,7 +82,9 @@ public class ColaCompileMojo extends BaseColaMojo {
 
     private void processIdeBaseClass(final List<String> classes) throws IOException {
         if (ideBaseClassTest == null || ideBaseClassTest.isEmpty()) {
-            getLog().warn("ideBaseClassTest method not set. Will look for default JUnit Test named 'iWillBeRemoved' method and remove if availble.");
+            getLog()
+            .warn(
+                "ideBaseClassTest method not set. Will look for default JUnit Test named 'iWillBeRemoved' method and remove if availble.");
             ideBaseClassTest = "iWillBeRemoved";
         }
 
@@ -108,7 +116,8 @@ public class ColaCompileMojo extends BaseColaMojo {
         }
     }
 
-    private void processClass(final String className, final ClassWriter cw, final ClassVisitor classVisitor) throws IOException, FileNotFoundException {
+    private void processClass(final String className, final ClassWriter cw, final ClassVisitor classVisitor)
+        throws IOException, FileNotFoundException {
         final InputStream in = classLoader.getResourceAsStream(className);
         final ClassReader classReader = new ClassReader(in);
 

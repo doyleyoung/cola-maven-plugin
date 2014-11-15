@@ -1,13 +1,13 @@
 package com.github.bmsantos.maven.cola.story.processor;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,71 +35,71 @@ public class StoryProcessorAnnotationTest {
     public void shouldProcessGiven() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         // When
-        StoryProcessor.process("Scenario: Should Process Story", story, instance);
+        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, instance);
 
         // Then
-        assertThat(instance.wasGivenCalled, is(true));
+        assertThat(instance.wasGivenCalled, equalTo(true));
     }
 
     @Test
     public void shouldProcessGivenAnd() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         // When
-        StoryProcessor.process("Scenario: Should Process Story", story, instance);
+        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, instance);
 
         // Then
-        assertThat(instance.wasGivenAndCalled, is(true));
+        assertThat(instance.wasGivenAndCalled, equalTo(true));
     }
 
     @Test
     public void shouldProcessWhen() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         // When
-        StoryProcessor.process("Scenario: Should Process Story", story, instance);
+        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, instance);
 
         // Then
-        assertThat(instance.wasWhenCalled, is(true));
+        assertThat(instance.wasWhenCalled, equalTo(true));
     }
 
     @Test
     public void shouldProcessWhenAnd() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         // When
-        StoryProcessor.process("Scenario: Should Process Story", story, instance);
+        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, instance);
 
         // Then
-        assertThat(instance.wasWhenAndCalled, is(true));
+        assertThat(instance.wasWhenAndCalled, equalTo(true));
     }
 
     @Test
     public void shouldProcessThen() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         // When
-        StoryProcessor.process("Scenario: Should Process Story", story, instance);
+        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, instance);
 
         // Then
-        assertThat(instance.wasThenCalled, is(true));
+        assertThat(instance.wasThenCalled, equalTo(true));
     }
 
     @Test
     public void shouldProcessThenAnd() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         // When
-        StoryProcessor.process("Scenario: Should Process Story", story, instance);
+        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, instance);
 
         // Then
-        assertThat(instance.wasThenAndCalled, is(true));
+        assertThat(instance.wasThenAndCalled, equalTo(true));
     }
 
     @Test
     public void shouldProcessInCorrectOrder() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         // When
-        StoryProcessor.process("Scenario: Should Process Story", story, instance);
+        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, instance);
 
         // Then
         assertThat(instance.executionOrder,
-            Matchers.contains("givenFirst", "givenSecond", "whenFirst", "whenSecond", "thenFirst", "thenSecond"));
+            contains("givenFirst", "givenSecond", "whenFirst", "whenSecond", "thenFirst", "thenSecond"));
     }
 
     private class TestClass {

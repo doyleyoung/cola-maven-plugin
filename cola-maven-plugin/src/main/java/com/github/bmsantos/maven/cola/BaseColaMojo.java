@@ -76,7 +76,7 @@ public abstract class BaseColaMojo extends AbstractMojo {
 
     protected ClassLoader getTestClassLoader() throws MalformedURLException {
         final URL[] urls = { new File(targetTestDirectory).toURI().toURL() };
-        final ClassLoader classLoader = new URLClassLoader(urls);
+        final ClassLoader classLoader = new URLClassLoader(urls, BaseColaMojo.class.getClassLoader());
         return classLoader;
     }
 
