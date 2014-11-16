@@ -16,18 +16,33 @@ import com.github.bmsantos.maven.cola.exceptions.InvalidFeatureUri;
 
 public class FeatureFormatterTest {
 
+    private static final String STEP_SIX = "the result will be addition of both numbers";
+    private static final String STEP_FIVE = "added together";
+    private static final String STEP_FOUR = "B";
+    private static final String STEP_THREE = "A";
     private static final String FEATURE_NAME = "Introduce addition";
+    private static final String BACKGROUND_NAME = "Should run before scenarios";
     private static final String SCENARIO_NAME = "Should add two numbers";
+    private static final String GIVEN = "Given ";
+    private static final String AND = "And ";
+    private static final String THEN = "Then ";
+    private static final String WHEN = "When ";
+    private static final String STEP_ONE = "a step";
+    private static final String STEP_TWO = "another step";
 
     private static final String PATH_TO_FEATURE = "/path/to/feature";
 
     private final String feature =
         "Feature: " + FEATURE_NAME +"\n"
+            + "Background: " + BACKGROUND_NAME + "\n"
+            + GIVEN + STEP_ONE + "\n" 
+            + AND + STEP_TWO + "\n"
+            + "\n"
             + "Scenario: " + SCENARIO_NAME + "\n"
-            + "Given A\n"
-            + "And B\n"
-            + "When added together\n"
-            + "Then the result will be addition of both numbers";
+            + GIVEN + STEP_THREE + "\n" 
+            + AND + STEP_FOUR + "\n"
+            + WHEN + STEP_FIVE + "\n"
+            + THEN + STEP_SIX;
 
     @Test
     public void shoulParseUri() {
@@ -45,6 +60,21 @@ public class FeatureFormatterTest {
 
         // Then
         assertThat(featureDetails.getFeature().getName(), equalTo(FEATURE_NAME));
+    }
+
+    @Test
+    public void shoulParseBackground() {
+        // When
+        final FeatureDetails featureDetails = FeatureFormatter.parse(feature, PATH_TO_FEATURE);
+
+        // Then
+        assertThat(featureDetails.getBackground().getName(), equalTo(BACKGROUND_NAME));
+
+        assertThat(featureDetails.getBackgroundSteps().get(0).getKeyword(), equalTo(GIVEN));
+        assertThat(featureDetails.getBackgroundSteps().get(0).getName(), equalTo(STEP_ONE));
+
+        assertThat(featureDetails.getBackgroundSteps().get(1).getKeyword(), equalTo(AND));
+        assertThat(featureDetails.getBackgroundSteps().get(1).getName(), equalTo(STEP_TWO));
     }
 
     @Test
@@ -69,17 +99,17 @@ public class FeatureFormatterTest {
         final Map<Scenario, List<Step>> scenarios = featureDetails.getScenarios();
         final Scenario scenario = scenarios.keySet().iterator().next();
         final List<Step> steps = scenarios.get(scenario);
-        assertThat(steps.get(0).getKeyword(), equalTo("Given "));
-        assertThat(steps.get(0).getName(), equalTo("A"));
+        assertThat(steps.get(0).getKeyword(), equalTo(GIVEN));
+        assertThat(steps.get(0).getName(), equalTo(STEP_THREE));
 
-        assertThat(steps.get(1).getKeyword(), equalTo("And "));
-        assertThat(steps.get(1).getName(), equalTo("B"));
+        assertThat(steps.get(1).getKeyword(), equalTo(AND));
+        assertThat(steps.get(1).getName(), equalTo(STEP_FOUR));
 
-        assertThat(steps.get(2).getKeyword(), equalTo("When "));
-        assertThat(steps.get(2).getName(), equalTo("added together"));
+        assertThat(steps.get(2).getKeyword(), equalTo(WHEN));
+        assertThat(steps.get(2).getName(), equalTo(STEP_FIVE));
 
-        assertThat(steps.get(3).getKeyword(), equalTo("Then "));
-        assertThat(steps.get(3).getName(), equalTo("the result will be addition of both numbers"));
+        assertThat(steps.get(3).getKeyword(), equalTo(THEN));
+        assertThat(steps.get(3).getName(), equalTo(STEP_SIX));
     }
 
     @Test(expected = InvalidFeature.class)

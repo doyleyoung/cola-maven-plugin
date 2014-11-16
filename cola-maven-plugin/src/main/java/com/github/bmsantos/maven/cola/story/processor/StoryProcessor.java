@@ -60,7 +60,7 @@ public class StoryProcessor {
 
         final Object[] empty = {};
         for (int i = 0; i < calls.size(); i++) {
-            log.info("-> " + lines[i]);
+            log.info("> " + lines[i]);
             final Method method = calls.get(i);
             method.invoke(instance, empty);
         }

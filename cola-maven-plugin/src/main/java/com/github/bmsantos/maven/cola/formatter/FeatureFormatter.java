@@ -20,6 +20,7 @@ public class FeatureFormatter implements Formatter {
 
     private FeatureDetails currentFeature;
     private Scenario currentScenario;
+    private Background currentBackground;
 
     public static FeatureDetails parse(final String feature, final String fromUri) {
         if (feature == null || feature.isEmpty()) {
@@ -76,18 +77,25 @@ public class FeatureFormatter implements Formatter {
 
     @Override
     public void background(final Background background) {
-        // empty
+        currentFeature.setBackground(background);
+        currentBackground = background;
+        currentScenario = null;
     }
 
     @Override
     public void scenario(final Scenario scenario) {
         currentFeature.getScenarios().put(scenario, new ArrayList<Step>());
         currentScenario = scenario;
+        currentBackground = null;
     }
 
     @Override
     public void step(final Step step) {
-        currentFeature.getScenarios().get(currentScenario).add(step);
+        if (currentScenario != null) {
+            currentFeature.getScenarios().get(currentScenario).add(step);
+        } else if (currentBackground != null) {
+            currentFeature.getBackgroundSteps().add(step);
+        }
     }
 
     @Override

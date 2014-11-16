@@ -47,7 +47,9 @@ public class InjectorClassVisitor extends ClassVisitor {
 
         for (final FeatureDetails feature : features) {
             for (final Scenario scenario : feature.getScenarios().keySet()) {
-                injectTestMethod(feature.getFeature(), scenario, feature.getScenarios().get(scenario));
+                final List<Step> story = new ArrayList<>(feature.getBackgroundSteps());
+                story.addAll(feature.getScenarios().get(scenario));
+                injectTestMethod(feature.getFeature(), scenario, story);
             }
         }
         super.visitEnd();
