@@ -10,7 +10,6 @@ import gherkin.formatter.model.ScenarioOutline;
 import gherkin.formatter.model.Step;
 import gherkin.parser.Parser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.github.bmsantos.maven.cola.exceptions.InvalidFeature;
@@ -19,8 +18,8 @@ import com.github.bmsantos.maven.cola.exceptions.InvalidFeatureUri;
 public class FeatureFormatter implements Formatter {
 
     private FeatureDetails currentFeature;
-    private Scenario currentScenario;
     private Background currentBackground;
+    private ScenarioDetails currentScenario;
 
     public static FeatureDetails parse(final String feature, final String fromUri) {
         if (feature == null || feature.isEmpty()) {
@@ -62,12 +61,14 @@ public class FeatureFormatter implements Formatter {
 
     @Override
     public void scenarioOutline(final ScenarioOutline scenarioOutline) {
-        // empty
+        currentScenario = new ScenarioDetails(scenarioOutline);
+        currentFeature.getScenarios().add(currentScenario);
     }
 
     @Override
     public void examples(final Examples examples) {
-        // empty
+        currentScenario.setExamples(examples);
+        expandExamples(currentScenario);
     }
 
     @Override
@@ -84,15 +85,15 @@ public class FeatureFormatter implements Formatter {
 
     @Override
     public void scenario(final Scenario scenario) {
-        currentFeature.getScenarios().put(scenario, new ArrayList<Step>());
-        currentScenario = scenario;
+        currentScenario = new ScenarioDetails(scenario);
+        currentFeature.getScenarios().add(currentScenario);
         currentBackground = null;
     }
 
     @Override
     public void step(final Step step) {
         if (currentScenario != null) {
-            currentFeature.getScenarios().get(currentScenario).add(step);
+            currentScenario.getSteps().add(step);
         } else if (currentBackground != null) {
             currentFeature.getBackgroundSteps().add(step);
         }
@@ -116,6 +117,10 @@ public class FeatureFormatter implements Formatter {
     @Override
     public void eof() {
         // empty
+    }
+
+    private void expandExamples(final ScenarioDetails scenarioDetails) {
+
     }
 
     private void out(final Object... values) {

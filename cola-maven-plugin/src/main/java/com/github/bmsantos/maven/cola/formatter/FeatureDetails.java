@@ -2,13 +2,10 @@ package com.github.bmsantos.maven.cola.formatter;
 
 import gherkin.formatter.model.Background;
 import gherkin.formatter.model.Feature;
-import gherkin.formatter.model.Scenario;
 import gherkin.formatter.model.Step;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class FeatureDetails {
 
@@ -16,7 +13,7 @@ public class FeatureDetails {
     private Feature feature;
     private Background background;
     private final List<Step> backgroundSteps = new ArrayList<>();
-    private final Map<Scenario, List<Step>> scenarios = new HashMap<>();
+    private final List<ScenarioDetails> scenarios = new ArrayList<>();
 
     public FeatureDetails(final String uri) {
         this.uri = uri;
@@ -46,7 +43,7 @@ public class FeatureDetails {
         return backgroundSteps;
     }
 
-    public Map<Scenario, List<Step>> getScenarios() {
+    public List<ScenarioDetails> getScenarios() {
         return scenarios;
     }
 }

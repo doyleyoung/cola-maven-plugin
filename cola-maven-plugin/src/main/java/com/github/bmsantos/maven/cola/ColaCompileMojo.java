@@ -12,7 +12,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
@@ -53,34 +52,48 @@ public class ColaCompileMojo extends BaseColaMojo {
 
     @Override
     public void execute() throws MojoExecutionException {
+        List<String> classes = null;
+
         try {
             classLoader = getTestClassLoader();
 
-            final List<String> classes = getClasses();
+            classes = getClasses();
 
             validateIdeBaseClass();
             processIdeBaseClass(classes);
 
-            for (final String className : classes) {
-                final Class<?> annotatedClass = classLoader.loadClass(className.replace(".class", "").replace("/", "."));
+        } catch (final Throwable t) {
+            t.printStackTrace();
+        }
+
+        boolean failures = false;
+        for (final String className : classes) {
+            try {
+                final Class<?> annotatedClass = classLoader
+                    .loadClass(className.replace(".class", "").replace("/", "."));
+
                 final List<FeatureDetails> featureList = loadFeaturesFrom(annotatedClass);
 
                 final ClassWriter classWritter = new ClassWriter(COMPUTE_MAXS);
-                final InjectorClassVisitor injectorClassVisitor = new InjectorClassVisitor(ASM4, classWritter, featureList);
+
+                final InjectorClassVisitor injectorClassVisitor = new InjectorClassVisitor(ASM4, classWritter,
+                    featureList);
+
                 processClass(className, classWritter, injectorClassVisitor);
+
+            } catch (final Throwable t) {
+                t.printStackTrace();
+                failures = true;
             }
-        } catch (final MalformedURLException e) {
-            e.printStackTrace();
-        } catch (final FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (final IOException e) {
-            e.printStackTrace();
-        } catch (final Throwable t) {
-            t.printStackTrace();
+
+            if (failures) {
+                throw new MojoExecutionException("There were errors while processing COLA JUnit Tests.");
+            }
         }
     }
 
     private void processIdeBaseClass(final List<String> classes) throws IOException {
+
         if (ideBaseClassTest == null || ideBaseClassTest.isEmpty()) {
             getLog()
             .warn(
@@ -103,7 +116,9 @@ public class ColaCompileMojo extends BaseColaMojo {
 
     private void validateIdeBaseClass() throws IOException {
         if (ideBaseClass == null || ideBaseClass.isEmpty()) {
+
             getLog().warn("ideBaseClass not set. Looking for default class.");
+
             ideBaseClass = "cola/ide/base/class/BaseColaTest.class";
             final File baseClass = new File(targetTestDirectory + "/" + ideBaseClass);
             if (baseClass.exists()) {
@@ -130,5 +145,4 @@ public class ColaCompileMojo extends BaseColaMojo {
         dout.write(cw.toByteArray());
         dout.close();
     }
-
 }

@@ -25,6 +25,7 @@ public class StoryProcessorAnnotationTest {
         + "But the second method will execute";
 
     private TestClass instance;
+    private final String projectionValues = "";
 
     @Before
     public void setUp() {
@@ -35,7 +36,8 @@ public class StoryProcessorAnnotationTest {
     public void shouldProcessGiven() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         // When
-        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, instance);
+        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, projectionValues,
+            instance);
 
         // Then
         assertThat(instance.wasGivenCalled, equalTo(true));
@@ -45,7 +47,8 @@ public class StoryProcessorAnnotationTest {
     public void shouldProcessGivenAnd() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         // When
-        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, instance);
+        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, projectionValues,
+            instance);
 
         // Then
         assertThat(instance.wasGivenAndCalled, equalTo(true));
@@ -55,7 +58,8 @@ public class StoryProcessorAnnotationTest {
     public void shouldProcessWhen() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         // When
-        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, instance);
+        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, projectionValues,
+            instance);
 
         // Then
         assertThat(instance.wasWhenCalled, equalTo(true));
@@ -65,7 +69,8 @@ public class StoryProcessorAnnotationTest {
     public void shouldProcessWhenAnd() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         // When
-        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, instance);
+        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, projectionValues,
+            instance);
 
         // Then
         assertThat(instance.wasWhenAndCalled, equalTo(true));
@@ -75,7 +80,8 @@ public class StoryProcessorAnnotationTest {
     public void shouldProcessThen() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         // When
-        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, instance);
+        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, projectionValues,
+            instance);
 
         // Then
         assertThat(instance.wasThenCalled, equalTo(true));
@@ -85,7 +91,8 @@ public class StoryProcessorAnnotationTest {
     public void shouldProcessThenAnd() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         // When
-        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, instance);
+        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, projectionValues,
+            instance);
 
         // Then
         assertThat(instance.wasThenAndCalled, equalTo(true));
@@ -95,7 +102,8 @@ public class StoryProcessorAnnotationTest {
     public void shouldProcessInCorrectOrder() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         // When
-        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, instance);
+        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", story, projectionValues,
+            instance);
 
         // Then
         assertThat(instance.executionOrder,

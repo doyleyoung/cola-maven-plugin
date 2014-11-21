@@ -7,7 +7,6 @@ import gherkin.formatter.model.Step;
 import gherkin.lexer.LexingError;
 
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Test;
 
@@ -35,11 +34,11 @@ public class FeatureFormatterTest {
     private final String feature =
         "Feature: " + FEATURE_NAME +"\n"
             + "Background: " + BACKGROUND_NAME + "\n"
-            + GIVEN + STEP_ONE + "\n" 
+            + GIVEN + STEP_ONE + "\n"
             + AND + STEP_TWO + "\n"
             + "\n"
             + "Scenario: " + SCENARIO_NAME + "\n"
-            + GIVEN + STEP_THREE + "\n" 
+            + GIVEN + STEP_THREE + "\n"
             + AND + STEP_FOUR + "\n"
             + WHEN + STEP_FIVE + "\n"
             + THEN + STEP_SIX;
@@ -85,8 +84,8 @@ public class FeatureFormatterTest {
         // Then
         assertThat(featureDetails.getScenarios().size(), equalTo(1));
 
-        final Map<Scenario, List<Step>> scenarios = featureDetails.getScenarios();
-        final Scenario scenario = scenarios.keySet().iterator().next();
+        final List<ScenarioDetails> scenarios = featureDetails.getScenarios();
+        final Scenario scenario = (Scenario) scenarios.iterator().next().getScenario();
         assertThat(scenario.getName(), equalTo(SCENARIO_NAME));
     }
 
@@ -96,9 +95,8 @@ public class FeatureFormatterTest {
         final FeatureDetails featureDetails = FeatureFormatter.parse(feature, PATH_TO_FEATURE);
 
         // Then
-        final Map<Scenario, List<Step>> scenarios = featureDetails.getScenarios();
-        final Scenario scenario = scenarios.keySet().iterator().next();
-        final List<Step> steps = scenarios.get(scenario);
+        final List<ScenarioDetails> scenarios = featureDetails.getScenarios();
+        final List<Step> steps = scenarios.iterator().next().getSteps();
         assertThat(steps.get(0).getKeyword(), equalTo(GIVEN));
         assertThat(steps.get(0).getName(), equalTo(STEP_THREE));
 
