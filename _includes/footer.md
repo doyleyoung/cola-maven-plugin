@@ -1,8 +1,7 @@
 
 
-Design by Tim O'Brien [t413.com](http://t413.com/)
+Released under [Apache 2](http://www.apache.org/licenses/LICENSE-2.0.txt) license
 &mdash;
-[SinglePaged theme](https://github.com/t413/SinglePaged)
+COLA Maven Plugin [OSS site]({{ site.source_link }})
 &mdash;
-this site is [open source]({{ site.source_link }})
-
+COLA m2e Connector [OSS site](https://github.com/bmsantos/m2eclipse-cola)
