@@ -4,3 +4,5 @@ cola-maven-plugin
 ==================
 
 JUnit + BDD = COLA Maven Plugin
+
+COLA Test [Web Site](http://bmsantos.github.io/cola-maven-plugin/)
