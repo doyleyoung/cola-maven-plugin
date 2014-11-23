@@ -1,5 +1,6 @@
 package com.github.bmsantos.maven.cola;
 
+import static com.github.bmsantos.maven.cola.config.ConfigurationManager.config;
 import static com.github.bmsantos.maven.cola.formatter.FeaturesLoader.loadFeaturesFrom;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_TEST_CLASSES;
 import static org.apache.maven.plugins.annotations.ResolutionScope.COMPILE;
@@ -87,7 +88,7 @@ public class ColaCompileMojo extends BaseColaMojo {
             }
 
             if (failures) {
-                throw new MojoExecutionException("There were errors while processing COLA JUnit Tests.");
+                throw new MojoExecutionException(config.error("processing"));
             }
         }
     }
@@ -95,9 +96,7 @@ public class ColaCompileMojo extends BaseColaMojo {
     private void processIdeBaseClass(final List<String> classes) throws IOException {
 
         if (ideBaseClassTest == null || ideBaseClassTest.isEmpty()) {
-            getLog()
-            .warn(
-                "ideBaseClassTest method not set. Will look for default JUnit Test named 'iWillBeRemoved' method and remove if availble.");
+            getLog().warn(config.warn("missing.ide.test"));
             ideBaseClassTest = "iWillBeRemoved";
         }
 
@@ -108,7 +107,7 @@ public class ColaCompileMojo extends BaseColaMojo {
 
         classes.remove(ideBaseClass);
 
-        final ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+        final ClassWriter cw = new ClassWriter(COMPUTE_MAXS);
         final MethodRemoverClassVisitor remover = new MethodRemoverClassVisitor(ASM4, cw, ideBaseClassTest);
 
         processClass(ideBaseClass, cw, remover);
@@ -117,14 +116,14 @@ public class ColaCompileMojo extends BaseColaMojo {
     private void validateIdeBaseClass() throws IOException {
         if (ideBaseClass == null || ideBaseClass.isEmpty()) {
 
-            getLog().warn("ideBaseClass not set. Looking for default class.");
+            getLog().warn(config.warn("missing.ide.class"));
 
             ideBaseClass = "cola/ide/base/class/BaseColaTest.class";
             final File baseClass = new File(targetTestDirectory + "/" + ideBaseClass);
             if (baseClass.exists()) {
-                getLog().info("Found default ideBaseClass class. Proceeding...");
+                getLog().info(config.info("found.default.ide.class"));
             } else {
-                final String msg = "Default class not found. Please set ideBaseClass property or create cola/ide/base/class/BaseColaTest test class.";
+                final String msg = config.error("missing.default.ide.class");
                 getLog().error(msg);
                 throw new IOException(msg);
             }
