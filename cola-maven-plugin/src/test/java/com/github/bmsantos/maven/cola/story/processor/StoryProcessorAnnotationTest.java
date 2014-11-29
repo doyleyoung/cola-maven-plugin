@@ -17,12 +17,18 @@ import com.github.bmsantos.maven.cola.story.annotations.When;
 
 public class StoryProcessorAnnotationTest {
 
-    private final String story = "Given a first method\n"
-        + "And a second method\n"
-        + "When the first method is called\n"
-        + "And the second method is called\n"
-        + "Then the first method will execute\n"
-        + "But the second method will execute";
+    private final String story =
+        "Given a first method\n"
+            + "And a second method\n"
+            + "When the first method is called\n"
+            + "And the second method is called\n"
+            + "Then the first method will execute\n"
+            + "But the second method will execute";
+
+    private final String regexStory =
+        "Given Beta\n"
+            + "When 101 is inserted\n"
+            + "Then the true real method will execute";
 
     private TestClass instance;
     private final String projectionValues = "";
@@ -110,6 +116,18 @@ public class StoryProcessorAnnotationTest {
             contains("givenFirst", "givenSecond", "whenFirst", "whenSecond", "thenFirst", "thenSecond"));
     }
 
+    @Test
+    public void shouldProcessRegularExpressionSteps() throws IllegalAccessException, IllegalArgumentException,
+    InvocationTargetException {
+
+        // When
+        StoryProcessor.process("Feature: I'm a feature", "Scenario: Should Process Story", regexStory,
+            projectionValues, instance);
+
+        // Then
+        assertThat(instance.executionOrder, contains("givenAlphaOrBeta", "whenANumberIsInserted", "thenTheRealMethodWillExecute"));
+    }
+
     private class TestClass {
 
         public boolean wasGivenCalled = false;
@@ -132,6 +150,11 @@ public class StoryProcessorAnnotationTest {
             executionOrder.add(Thread.currentThread().getStackTrace()[1].getMethodName());
         }
 
+        @Given("Alpha|Beta")
+        public void givenAlphaOrBeta() {
+            executionOrder.add(Thread.currentThread().getStackTrace()[1].getMethodName());
+        }
+
         @When("the first method is called")
         public void whenFirst() {
             wasWhenCalled = true;
@@ -141,6 +164,11 @@ public class StoryProcessorAnnotationTest {
         @When("the second method is called")
         public void whenSecond() {
             wasWhenAndCalled = true;
+            executionOrder.add(Thread.currentThread().getStackTrace()[1].getMethodName());
+        }
+
+        @When("\\d+ is inserted")
+        public void whenANumberIsInserted() {
             executionOrder.add(Thread.currentThread().getStackTrace()[1].getMethodName());
         }
 
@@ -154,6 +182,11 @@ public class StoryProcessorAnnotationTest {
         public void thenSecond() {
             wasThenAndCalled = true;
             executionOrder.add(Thread.currentThread().getStackTrace()[1].getMethodName());
+        }
+        
+        @Then("the (first|true real) method will execute")
+        public void thenTheRealMethodWillExecute() {
+            executionOrder.add(Thread.currentThread().getStackTrace()[1].getMethodName());            
         }
     }
 
