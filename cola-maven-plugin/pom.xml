@@ -13,7 +13,7 @@
 	<artifactId>cola-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
 
-	<name>cortx-maven-plugin</name>
+	<name>cola-maven-plugin</name>
 
 	<dependencies>
 		<dependency>

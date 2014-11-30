@@ -33,6 +33,8 @@ import org.sonatype.plexus.build.incremental.BuildContext;
 
 public abstract class BaseColaMojo extends AbstractMojo {
 
+    private static final String CLASS_EXT = ".class";
+
     @Component
     protected BuildContext context;
 
@@ -90,9 +92,15 @@ public abstract class BaseColaMojo extends AbstractMojo {
             }
         }
 
+        final String[] resolvedIncludes = resolveIncludes();
+
+        for (final String i : resolvedIncludes) {
+            System.err.println("Include: " + i);
+        }
+
         final DirectoryScanner scanner = new DirectoryScanner();
-        if (includes != null && includes.length > 0) {
-            scanner.setIncludes(includes);
+        if (resolvedIncludes != null && resolvedIncludes.length > 0) {
+            scanner.setIncludes(resolvedIncludes);
         }
         if (excludes != null && excludes.length > 0) {
             scanner.setExcludes(excludes);
@@ -102,5 +110,27 @@ public abstract class BaseColaMojo extends AbstractMojo {
         scanner.scan();
 
         return new ArrayList<String>(asList(scanner.getIncludedFiles()));
+    }
+
+    protected String[] resolveIncludes() {
+        final List<String> list = new ArrayList<>();
+        final String test = System.getProperties().getProperty("test");
+        final String itTest = System.getProperties().getProperty("it.test");
+
+        if (test != null) {
+            list.add(test.endsWith(CLASS_EXT) ? test : test + CLASS_EXT);
+        }
+        if (itTest != null) {
+            list.add(itTest.endsWith(CLASS_EXT) ? itTest : itTest + CLASS_EXT);
+        }
+        if (!list.isEmpty()) {
+            return list.toArray(new String[list.size()]);
+        }
+
+        if (includes != null && includes.length > 0) {
+            return includes;
+        }
+
+        return null;
     }
 }
