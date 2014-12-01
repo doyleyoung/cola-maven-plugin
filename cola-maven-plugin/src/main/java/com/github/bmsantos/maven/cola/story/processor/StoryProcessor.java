@@ -26,11 +26,12 @@ public class StoryProcessor {
     private static final List<String> fillers = asList("And", "But");
 
     public static void process(final String feature, final String scenario, final String story, final String projectionDetails, final Object instance)
-        throws IllegalAccessException, IllegalArgumentException,
-        InvocationTargetException {
+        throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         log.info("Feature: " + feature + " - Scenario: " + scenario);
-        log.info(projectionDetails);
+        if (projectionDetails != null && !projectionDetails.isEmpty()) {
+            log.info(projectionDetails);
+        }
 
         Map<String, String> projectionValues = new HashMap<>();
         if (projectionDetails != null && !projectionDetails.isEmpty()) {
@@ -87,7 +88,7 @@ public class StoryProcessor {
 
     private static boolean isGiven(final String type, final String step, final Method method) {
         return Given.class.getName().endsWith(type) && method.isAnnotationPresent(Given.class)
-            && (method.getAnnotation(Given.class).value().equals(step) || 
+            && (method.getAnnotation(Given.class).value().equals(step) ||
                 step.matches(method.getAnnotation(Given.class).value()));
     }
 
