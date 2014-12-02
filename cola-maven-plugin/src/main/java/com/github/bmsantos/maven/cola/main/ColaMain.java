@@ -151,6 +151,7 @@ public class ColaMain {
 
     private boolean fileExists(final String clazz) {
         return clazz != null && !clazz.isEmpty()
-            && new File(testClassDirectory + clazz + (clazz.endsWith(".class") ? "" : ".class")).exists();
+            && new File(testClassDirectory + clazz.replace(".", "/") + (clazz.endsWith(".class") ? "" : ".class"))
+                .exists();
     }
 }

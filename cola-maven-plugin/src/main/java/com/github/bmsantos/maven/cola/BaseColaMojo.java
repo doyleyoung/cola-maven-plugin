@@ -16,6 +16,7 @@ package com.github.bmsantos.maven.cola;
  * limitations under the License.
  */
 
+import static java.lang.System.getProperties;
 import static java.util.Arrays.asList;
 
 import java.io.File;
@@ -25,15 +26,20 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.sonatype.plexus.build.incremental.BuildContext;
 
 public abstract class BaseColaMojo extends AbstractMojo {
 
     private static final String CLASS_EXT = ".class";
+
+    @Component
+    protected MavenProject project;
 
     @Component
     protected BuildContext context;
@@ -76,9 +82,16 @@ public abstract class BaseColaMojo extends AbstractMojo {
     @Parameter(defaultValue = "true")
     protected Boolean log;
 
-    protected ClassLoader getTestClassLoader() throws MalformedURLException {
-        final URL[] urls = { new File(targetTestDirectory).toURI().toURL() };
-        final ClassLoader classLoader = new URLClassLoader(urls, BaseColaMojo.class.getClassLoader());
+    @SuppressWarnings("unchecked")
+    protected ClassLoader getTestClassLoader() throws MalformedURLException, DependencyResolutionRequiredException {
+        final List<URL> urls = new ArrayList<>();
+
+        final List<String> paths = project.getTestClasspathElements();
+        for (final String path : paths) {
+            urls.add(new File(path).toURI().toURL());
+        }
+
+        final ClassLoader classLoader = new URLClassLoader(urls.toArray(new URL[urls.size()]), BaseColaMojo.class.getClassLoader());
         return classLoader;
     }
 
@@ -93,10 +106,6 @@ public abstract class BaseColaMojo extends AbstractMojo {
         }
 
         final String[] resolvedIncludes = resolveIncludes();
-
-        for (final String i : resolvedIncludes) {
-            System.err.println("Include: " + i);
-        }
 
         final DirectoryScanner scanner = new DirectoryScanner();
         if (resolvedIncludes != null && resolvedIncludes.length > 0) {
@@ -114,8 +123,8 @@ public abstract class BaseColaMojo extends AbstractMojo {
 
     protected String[] resolveIncludes() {
         final List<String> list = new ArrayList<>();
-        final String test = System.getProperties().getProperty("test");
-        final String itTest = System.getProperties().getProperty("it.test");
+        final String test = getProperties().getProperty("test");
+        final String itTest = getProperties().getProperty("it.test");
 
         if (test != null) {
             list.add(test.endsWith(CLASS_EXT) ? test : test + CLASS_EXT);

@@ -2,7 +2,7 @@ package com.github.bmsantos.maven.cola;
 
 import static com.github.bmsantos.maven.cola.config.ConfigurationManager.config;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_TEST_CLASSES;
-import static org.apache.maven.plugins.annotations.ResolutionScope.COMPILE;
+import static org.apache.maven.plugins.annotations.ResolutionScope.TEST;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -29,7 +29,7 @@ import com.github.bmsantos.maven.cola.main.ColaMain;
 /**
  * @description Process BDD scenarios and inject JUnit tests into Cola Tests.
  */
-@Mojo(name = "compile", requiresProject = true, threadSafe = false, requiresDependencyResolution = COMPILE,
+@Mojo(name = "compile", requiresProject = true, threadSafe = false, requiresDependencyResolution = TEST,
 defaultPhase = PROCESS_TEST_CLASSES)
 public class ColaCompileMojo extends BaseColaMojo {
 
