@@ -3,6 +3,7 @@ package com.github.bmsantos.maven.cola.main;
 import static com.github.bmsantos.maven.cola.config.ConfigurationManager.config;
 import static java.io.File.separator;
 import static java.lang.String.format;
+import static org.codehaus.plexus.util.FileUtils.rename;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -11,6 +12,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -81,11 +83,11 @@ public class ColaMainTest {
     }
 
     @Test
-    public void shouldNotProcessDefaultIdeBaseClass() throws MojoExecutionException {
+    public void shouldNotProcessDefaultIdeBaseClass() throws MojoExecutionException, IOException {
         // Given
         final File ideClass = new File(TARGET_DIR + separator + toOSPath(config.getProperty("default.ide.class")) + ".class");
         final File renamedIdeClass = new File(TARGET_DIR + separator + toOSPath(config.getProperty("default.ide.class")) + "_renamed");
-        ideClass.renameTo(renamedIdeClass);
+        rename(ideClass, renamedIdeClass);
 
         // When
         uut.execute(classes);
