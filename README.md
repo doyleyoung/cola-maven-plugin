@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/bmsantos/cola-maven-plugin.svg?branch=master)](https://travis-ci.org/bmsantos/cola-maven-plugin)
+[![Travis Build Status](https://travis-ci.org/bmsantos/cola-maven-plugin.svg?branch=master)](https://travis-ci.org/bmsantos/cola-maven-plugin)
+[![AppVeyor Build status](https://ci.appveyor.com/api/github/webhook?id=3k6ewjhnvr2itn9c)](https://ci.appveyor.com/project/bmsantos/cola-maven-plugin)
 
 cola-maven-plugin
 ==================
