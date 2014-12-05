@@ -14,9 +14,10 @@ install:
   # to install unzipper do: "cinst 7zip.commandline -x86"
   # the format is: "7z x c:\path-to-archive\archive.zip -oc:\path-where-unzip -y > nul"
   - cmd: cinst wget -x86
+  - cmd: cinst maven
 before_build:
   - cmd: java -version
-  - cmd: wget http://www.motorlogy.com/apache/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.zip
+#  - cmd: wget http://www.motorlogy.com/apache/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.zip
   - cmd: mvn -version
 test_script:
   - cmd: mvn clean install
