@@ -183,10 +183,10 @@ public class StoryProcessorAnnotationTest {
             wasThenAndCalled = true;
             executionOrder.add(Thread.currentThread().getStackTrace()[1].getMethodName());
         }
-        
-        @Then("the (first|true real) method will execute")
+
+        @Then("the (unreal|true real) method will execute")
         public void thenTheRealMethodWillExecute() {
-            executionOrder.add(Thread.currentThread().getStackTrace()[1].getMethodName());            
+            executionOrder.add(Thread.currentThread().getStackTrace()[1].getMethodName());
         }
     }
 
