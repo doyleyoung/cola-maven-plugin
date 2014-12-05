@@ -3,7 +3,6 @@ package com.github.bmsantos.maven.cola.main;
 import static com.github.bmsantos.maven.cola.config.ConfigurationManager.config;
 import static java.io.File.separator;
 import static java.lang.String.format;
-import static org.codehaus.plexus.util.FileUtils.rename;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -12,7 +11,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,10 +18,18 @@ import java.util.List;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import com.codeaffine.test.ConditionalIgnoreRule;
+import com.codeaffine.test.ConditionalIgnoreRule.ConditionalIgnore;
+import com.github.bmsantos.maven.cola.utils.RunningOnWindows;
+
 public class ColaMainTest {
+
+    @Rule
+    public ConditionalIgnoreRule rule = new ConditionalIgnoreRule();
 
     private static final String TARGET_DIR = toOSPath("target/test-classes");
 
@@ -83,11 +89,12 @@ public class ColaMainTest {
     }
 
     @Test
-    public void shouldNotProcessDefaultIdeBaseClass() throws MojoExecutionException, IOException {
+    @ConditionalIgnore(condition = RunningOnWindows.class)
+    public void shouldNotProcessDefaultIdeBaseClass() throws MojoExecutionException {
         // Given
         final File ideClass = new File(TARGET_DIR + separator + toOSPath(config.getProperty("default.ide.class")) + ".class");
         final File renamedIdeClass = new File(TARGET_DIR + separator + toOSPath(config.getProperty("default.ide.class")) + "_renamed");
-        rename(ideClass, renamedIdeClass);
+        ideClass.renameTo(renamedIdeClass);
 
         // When
         uut.execute(classes);
