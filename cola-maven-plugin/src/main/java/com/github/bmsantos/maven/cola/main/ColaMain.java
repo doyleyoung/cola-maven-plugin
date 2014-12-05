@@ -2,6 +2,11 @@ package com.github.bmsantos.maven.cola.main;
 
 import static com.github.bmsantos.maven.cola.config.ConfigurationManager.config;
 import static com.github.bmsantos.maven.cola.formatter.FeaturesLoader.loadFeaturesFrom;
+import static com.github.bmsantos.maven.cola.utils.ColaUtils.binaryToOsClass;
+import static com.github.bmsantos.maven.cola.utils.ColaUtils.classToBinary;
+import static com.github.bmsantos.maven.cola.utils.ColaUtils.binaryFileExists;
+import static com.github.bmsantos.maven.cola.utils.ColaUtils.isSet;
+import static java.io.File.separator;
 import static java.lang.String.format;
 import static org.objectweb.asm.ClassWriter.COMPUTE_MAXS;
 import static org.objectweb.asm.Opcodes.ASM4;
@@ -37,7 +42,7 @@ public class ColaMain {
 
     public ColaMain(final String testClassDirectory, final ClassLoader classLoader, final String ideBaseClass,
         final String ideBaseClassTest, final Log log) {
-        this.testClassDirectory = testClassDirectory.endsWith("/") ? testClassDirectory : testClassDirectory + "/";
+        this.testClassDirectory = testClassDirectory.endsWith(separator) ? testClassDirectory : testClassDirectory + separator;
         this.classLoader = classLoader;
         this.ideBaseClass = ideBaseClass;
         this.ideBaseClassTest = ideBaseClassTest;
@@ -66,8 +71,7 @@ public class ColaMain {
 
         for (final String className : classes) {
             try {
-                final Class<?> annotatedClass = classLoader
-                    .loadClass(className.replace(".class", "").replace("/", "."));
+                final Class<?> annotatedClass = classLoader.loadClass(classToBinary(className));
 
                 final List<FeatureDetails> featureList = loadFeaturesFrom(annotatedClass);
 
@@ -78,7 +82,7 @@ public class ColaMain {
 
                 processClass(className, classWritter, injectorClassVisitor);
             } catch (final Throwable t) {
-                log.error(config.error("failed.process.file"), t);
+                log.error(format(config.error("failed.process.file"), className), t);
                 failures.add(format(config.error("failed.processing"), className, t.getMessage()));
             }
         }
@@ -95,10 +99,7 @@ public class ColaMain {
 
     private String processIdeBaseClass() throws IOException {
 
-        ideBaseClass = ideBaseClass.replace(".", "/");
-        if (!ideBaseClass.endsWith(".class")) {
-            ideBaseClass += ".class";
-        }
+        ideBaseClass = binaryToOsClass(ideBaseClass);
 
         final ClassWriter cw = new ClassWriter(COMPUTE_MAXS);
         final MethodRemoverClassVisitor remover = new MethodRemoverClassVisitor(ASM4, cw, ideBaseClassTest);
@@ -109,19 +110,19 @@ public class ColaMain {
     }
 
     private boolean isValidIdeBaseClass() {
-        if (ideBaseClassTest == null || ideBaseClassTest.isEmpty()) {
+        if (!isSet(ideBaseClassTest)) {
             log.warn(config.warn("missing.ide.test"));
             ideBaseClassTest = config.getProperty("default.ide.test");
         }
 
-        if (fileExists(ideBaseClass)) {
+        if (binaryFileExists(testClassDirectory, ideBaseClass)) {
             return true;
         } else {
             // Try default
             log.info(config.info("missing.ide.class"));
 
             ideBaseClass = config.getProperty("default.ide.class");
-            if (fileExists(ideBaseClass)) {
+            if (binaryFileExists(testClassDirectory, ideBaseClass)) {
                 log.info(config.info("found.default.ide.class"));
                 return true;
             } else {
@@ -147,11 +148,5 @@ public class ColaMain {
 
         dout.write(cw.toByteArray());
         dout.close();
-    }
-
-    private boolean fileExists(final String clazz) {
-        return clazz != null && !clazz.isEmpty()
-            && new File(testClassDirectory + clazz.replace(".", "/") + (clazz.endsWith(".class") ? "" : ".class"))
-                .exists();
     }
 }

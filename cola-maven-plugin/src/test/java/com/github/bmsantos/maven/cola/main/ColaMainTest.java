@@ -1,6 +1,7 @@
 package com.github.bmsantos.maven.cola.main;
 
 import static com.github.bmsantos.maven.cola.config.ConfigurationManager.config;
+import static java.io.File.separator;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -22,7 +23,7 @@ import org.mockito.Mock;
 
 public class ColaMainTest {
 
-    private static final String TARGET_DIR = "target/test-classes";
+    private static final String TARGET_DIR = toOSPath("target/test-classes");
 
     @Mock
     private Log logger;
@@ -31,7 +32,7 @@ public class ColaMainTest {
 
     private List<String> classes;
 
-    private final String testClass = "cola/ide/AnotherColaTest.class";
+    private final String testClass = toOSPath("cola/ide/AnotherColaTest.class");
 
     @Before
     public void setUp() {
@@ -82,8 +83,8 @@ public class ColaMainTest {
     @Test
     public void shouldNotProcessDefaultIdeBaseClass() throws MojoExecutionException {
         // Given
-        final File ideClass = new File(TARGET_DIR + "/" + config.getProperty("default.ide.class") + ".class");
-        final File renamedIdeClass = new File(TARGET_DIR + "/" + config.getProperty("default.ide.class") + "_renamed");
+        final File ideClass = new File(TARGET_DIR + separator + toOSPath(config.getProperty("default.ide.class")) + ".class");
+        final File renamedIdeClass = new File(TARGET_DIR + separator + toOSPath(config.getProperty("default.ide.class")) + "_renamed");
         ideClass.renameTo(renamedIdeClass);
 
         // When
@@ -106,22 +107,22 @@ public class ColaMainTest {
     @Test
     public void shouldFindProvidedIdeBaseClass() throws MojoExecutionException {
         // Given
-        final String ideClass = config.getProperty("default.ide.class");
+        final String ideClass = toOSPath(config.getProperty("default.ide.class"));
         uut = new ColaMain(TARGET_DIR, getClass().getClassLoader(), ideClass, null, logger);
 
         // When
         uut.execute(classes);
 
         // Then
-        verify(logger).info(config.info("processing") + TARGET_DIR + "/" + ideClass + ".class");
+        verify(logger).info(config.info("processing") + TARGET_DIR + separator + ideClass + ".class");
     }
 
     // In order to have the following test pass the class has to be recompiled.
     @Test
     public void shouldFindProvidedIdeBaseClassTest() throws MojoExecutionException {
         // Given
-        final String ideClass = config.getProperty("default.ide.class");
-        final File testClassFile = new File(TARGET_DIR + "/" + ideClass + ".class");
+        final String ideClass = toOSPath(config.getProperty("default.ide.class"));
+        final File testClassFile = new File(TARGET_DIR + separator + ideClass + ".class");
         final long initialSize = testClassFile.length();
         uut = new ColaMain(TARGET_DIR, getClass().getClassLoader(), ideClass, "toBeRemoved", logger);
 
@@ -136,7 +137,7 @@ public class ColaMainTest {
     @Test
     public void shouldProcessTestClasses() throws MojoExecutionException {
         // Given
-        final File testClassFile = new File(TARGET_DIR + "/" + testClass);
+        final File testClassFile = new File(TARGET_DIR + separator + testClass);
         final long initialSize = testClass.length();
 
         // When
@@ -150,7 +151,7 @@ public class ColaMainTest {
     @Test(expected = MojoExecutionException.class)
     public void shouldThrowMojExecutionExceptionOnInvalidClasses() throws MojoExecutionException {
         // Given
-        classes.add("this/path/takes/to/nowhere/NotFountTest.class");
+        classes.add(toOSPath("this/path/takes/to/nowhere/NotFountTest.class"));
 
         // When
         uut.execute(classes);
@@ -162,9 +163,9 @@ public class ColaMainTest {
     @Test
     public void shouldCollectFailureHistory() {
         // Given
-        classes.add("this/path/takes/to/nowhere/NotFountTest1.class");
-        classes.add("this/path/takes/to/nowhere/NotFountTest2.class");
-        classes.add("this/path/takes/to/nowhere/NotFountTest3.class");
+        classes.add(toOSPath("this/path/takes/to/nowhere/NotFountTest1.class"));
+        classes.add(toOSPath("this/path/takes/to/nowhere/NotFountTest2.class"));
+        classes.add(toOSPath("this/path/takes/to/nowhere/NotFountTest3.class"));
 
         // When
         try {
@@ -175,5 +176,9 @@ public class ColaMainTest {
         // Then
         assertThat(uut.getFailures().size(), is(3));
         verify(logger).error(format(config.error("failed.tests"), 3, 4));
+    }
+
+    private static String toOSPath(final String value) {
+        return value.replace("/", separator);
     }
 }
