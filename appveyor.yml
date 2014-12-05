@@ -5,10 +5,18 @@ branches:
   except:
     - gh-pages
 os: Windows Server 2012
+install:
+  # to install downloader do: "cinst wget -x86"
+  # the format is: "wget -q URL -O c:\path-to-file\file_name"
+  # special format is: "wget -q --no-check-certificate URL -O c:\path-to-file\file_name"
+  # that accounts for downloading from e.g. https://googledrive.com/host/$HASH
+  # -
+  # to install unzipper do: "cinst 7zip.commandline -x86"
+  # the format is: "7z x c:\path-to-archive\archive.zip -oc:\path-where-unzip -y > nul"
+  - cmd: cinst wget -x86
 before_build:
   - cmd: java -version
   - cmd: wget http://www.motorlogy.com/apache/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.zip
   - cmd: mvn -version
 test_script:
   - cmd: mvn clean install
-
