@@ -1,5 +1,5 @@
-[![Travis Build Status](https://travis-ci.org/bmsantos/cola-maven-plugin.svg?branch=master)](https://travis-ci.org/bmsantos/cola-maven-plugin)
-[![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/3k6ewjhnvr2itn9c)](https://ci.appveyor.com/project/bmsantos/cola-maven-plugin)
+OSX/Linux CI: [![Travis Build Status](https://travis-ci.org/bmsantos/cola-maven-plugin.svg?branch=master)](https://travis-ci.org/bmsantos/cola-maven-plugin)
+Windows CI: [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/3k6ewjhnvr2itn9c)](https://ci.appveyor.com/project/bmsantos/cola-maven-plugin)
 
 cola-maven-plugin
 ==================
