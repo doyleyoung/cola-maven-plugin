@@ -83,7 +83,7 @@ public abstract class BaseColaMojo extends AbstractMojo {
     protected Boolean log;
 
     @SuppressWarnings("unchecked")
-    protected ClassLoader getTestClassLoader() throws MalformedURLException, DependencyResolutionRequiredException {
+    protected URLClassLoader getTestClassLoader() throws MalformedURLException, DependencyResolutionRequiredException {
         final List<URL> urls = new ArrayList<>();
 
         final List<String> paths = project.getTestClasspathElements();
@@ -91,8 +91,7 @@ public abstract class BaseColaMojo extends AbstractMojo {
             urls.add(new File(path).toURI().toURL());
         }
 
-        final ClassLoader classLoader = new URLClassLoader(urls.toArray(new URL[urls.size()]), BaseColaMojo.class.getClassLoader());
-        return classLoader;
+        return new URLClassLoader(urls.toArray(new URL[urls.size()]), BaseColaMojo.class.getClassLoader());
     }
 
     @SuppressWarnings("unchecked")

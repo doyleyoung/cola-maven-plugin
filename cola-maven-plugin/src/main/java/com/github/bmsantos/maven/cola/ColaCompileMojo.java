@@ -4,6 +4,8 @@ import static com.github.bmsantos.maven.cola.config.ConfigurationManager.config;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_TEST_CLASSES;
 import static org.apache.maven.plugins.annotations.ResolutionScope.TEST;
 
+import java.net.URLClassLoader;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 
@@ -35,9 +37,9 @@ public class ColaCompileMojo extends BaseColaMojo {
 
     @Override
     public void execute() throws MojoExecutionException {
-        try {
-            final ColaMain main = new ColaMain(targetTestDirectory, getTestClassLoader(), ideBaseClass,
-                ideBaseClassTest, getLog());
+        try (final URLClassLoader classLoader = getTestClassLoader()) {
+            final ColaMain main = new ColaMain(targetTestDirectory, classLoader, 
+                ideBaseClass, ideBaseClassTest, getLog());
 
             main.execute(getClasses());
         } catch (final Throwable t) {

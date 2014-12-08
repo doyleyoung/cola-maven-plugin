@@ -2,9 +2,9 @@ package com.github.bmsantos.maven.cola.main;
 
 import static com.github.bmsantos.maven.cola.config.ConfigurationManager.config;
 import static com.github.bmsantos.maven.cola.formatter.FeaturesLoader.loadFeaturesFrom;
+import static com.github.bmsantos.maven.cola.utils.ColaUtils.binaryFileExists;
 import static com.github.bmsantos.maven.cola.utils.ColaUtils.binaryToOsClass;
 import static com.github.bmsantos.maven.cola.utils.ColaUtils.classToBinary;
-import static com.github.bmsantos.maven.cola.utils.ColaUtils.binaryFileExists;
 import static com.github.bmsantos.maven.cola.utils.ColaUtils.isSet;
 import static java.io.File.separator;
 import static java.lang.String.format;
