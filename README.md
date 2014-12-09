@@ -9,32 +9,35 @@ JUnit + BDD = COLA Maven Plugin
 
 COLA Test [Web Site](http://bmsantos.github.io/cola-maven-plugin/)
 
-Current version: 0.0.1-SNAPSHOT
+Current version: 0.0.1
+
+Current snapshot (non-production): 0.0.2-SNAPSHOT
 
 Setup:
 ```xml
 
     <properties>
-        <cola.version>0.0.1-SNAPSHOT</cola.version>
+        <cola.version>0.0.1</cola.version>
     </properties>
 
-    <repositories>
+    <!-- If using snapshot uncomment the next snapshot repo defenition -->
+    <i!-- repositories>
         <repository>
             <id>snapshots-repo</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
             <releases><enabled>false</enabled></releases>
             <snapshots><enabled>true</enabled></snapshots>
         </repository>
-    </repositories>
+    </repositories -->
 
-    <pluginRepositories>
+    <!-- pluginRepositories>
         <pluginRepository>
             <id>snapshots-repo</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
             <releases><enabled>false</enabled></releases>
             <snapshots><enabled>true</enabled></snapshots>
         </pluginRepository>
-    </pluginRepositories>
+    </pluginRepositories -->
 
     <dependencies>
         <dependency>
