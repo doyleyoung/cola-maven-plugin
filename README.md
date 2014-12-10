@@ -11,7 +11,7 @@ COLA Test [Web Site](http://bmsantos.github.io/cola-maven-plugin/)
 
 Current version: 0.0.2
 
-Current snapshot (non-production): 0.0.2-SNAPSHOT
+Current snapshot (non-production): 0.0.3-SNAPSHOT
 
 Setup:
 ```xml
