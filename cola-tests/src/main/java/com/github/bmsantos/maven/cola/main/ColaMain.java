@@ -20,40 +20,41 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.logging.Log;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.github.bmsantos.maven.cola.exceptions.ColaExecutionException;
 import com.github.bmsantos.maven.cola.formatter.FeatureDetails;
 import com.github.bmsantos.maven.cola.injector.InjectorClassVisitor;
 import com.github.bmsantos.maven.cola.injector.MethodRemoverClassVisitor;
 
 public class ColaMain {
 
+    private static Logger log = LoggerFactory.getLogger(ColaMain.class);
+
     private final ClassLoader classLoader;
     private final String testClassDirectory;
     private String ideBaseClass;
     private String ideBaseClassTest;
-    private final Log log;
 
     private List<String> failures;
 
     public ColaMain(final String testClassDirectory, final ClassLoader classLoader, final String ideBaseClass,
-        final String ideBaseClassTest, final Log log) {
+        final String ideBaseClassTest) {
         this.testClassDirectory = testClassDirectory.endsWith(separator) ? testClassDirectory : testClassDirectory + separator;
         this.classLoader = classLoader;
         this.ideBaseClass = ideBaseClass;
         this.ideBaseClassTest = ideBaseClassTest;
-        this.log = log;
     }
 
     public List<String> getFailures() {
         return failures;
     }
 
-    public void execute(final List<String> classes) throws MojoExecutionException {
+    public void execute(final List<String> classes) throws ColaExecutionException {
         failures = new ArrayList<>();
 
         if (classes == null || classes.isEmpty()) {
@@ -93,7 +94,7 @@ public class ColaMain {
                 log.error(failure);
             }
 
-            throw new MojoExecutionException(config.error("processing"));
+            throw new ColaExecutionException(config.error("processing"));
         }
     }
 

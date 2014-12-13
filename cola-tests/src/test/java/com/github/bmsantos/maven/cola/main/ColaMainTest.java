@@ -4,26 +4,29 @@ import static com.github.bmsantos.maven.cola.config.ConfigurationManager.config;
 import static java.io.File.separator;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.verify;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static uk.org.lidalia.slf4jtest.LoggingEvent.error;
+import static uk.org.lidalia.slf4jtest.LoggingEvent.info;
+import static uk.org.lidalia.slf4jtest.LoggingEvent.warn;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.logging.Log;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mock;
+
+import uk.org.lidalia.slf4jtest.TestLogger;
+import uk.org.lidalia.slf4jtest.TestLoggerFactory;
 
 import com.codeaffine.test.ConditionalIgnoreRule;
 import com.codeaffine.test.ConditionalIgnoreRule.ConditionalIgnore;
+import com.github.bmsantos.maven.cola.exceptions.ColaExecutionException;
 import com.github.bmsantos.maven.cola.utils.RunningOnWindows;
 
 public class ColaMainTest {
@@ -33,8 +36,7 @@ public class ColaMainTest {
 
     private static final String TARGET_DIR = toOSPath("target/test-classes");
 
-    @Mock
-    private Log logger;
+    private final TestLogger logger = TestLoggerFactory.getTestLogger(ColaMain.class);
 
     private ColaMain uut;
 
@@ -44,16 +46,14 @@ public class ColaMainTest {
 
     @Before
     public void setUp() {
-        initMocks(this);
-
         classes = new ArrayList<>();
         classes.add(testClass);
 
-        uut = new ColaMain(TARGET_DIR, getClass().getClassLoader(), null, null, logger);
+        uut = new ColaMain(TARGET_DIR, getClass().getClassLoader(), null, null);
     }
 
     @Test
-    public void shouldNotProcessOnNullList() throws MojoExecutionException {
+    public void shouldNotProcessOnNullList() throws ColaExecutionException {
         // When
         uut.execute(null);
 
@@ -62,7 +62,7 @@ public class ColaMainTest {
     }
 
     @Test
-    public void shouldNotProcessOnEmptyList() throws MojoExecutionException {
+    public void shouldNotProcessOnEmptyList() throws ColaExecutionException {
         // When
         uut.execute(Collections.<String> emptyList());
 
@@ -71,26 +71,26 @@ public class ColaMainTest {
     }
 
     @Test
-    public void shouldNotProcessMissingIdeBaseClassTest() throws MojoExecutionException {
+    public void shouldNotProcessMissingIdeBaseClassTest() throws ColaExecutionException {
         // When
         uut.execute(classes);
 
         // Then
-        verify(logger).warn(config.warn("missing.ide.test"));
+        assertThat(logger.getLoggingEvents(), hasItem(warn(config.warn("missing.ide.test"))));
     }
 
     @Test
-    public void shouldNotProcessMissingIdeBaseClass() throws MojoExecutionException {
+    public void shouldNotProcessMissingIdeBaseClass() throws ColaExecutionException {
         // When
         uut.execute(classes);
 
         // Then
-        verify(logger).info(config.info("missing.ide.class"));
+        assertThat(logger.getAllLoggingEvents(), hasItem(info(config.info("missing.ide.class"))));
     }
 
     @Test
     @ConditionalIgnore(condition = RunningOnWindows.class)
-    public void shouldNotProcessDefaultIdeBaseClass() throws MojoExecutionException {
+    public void shouldNotProcessDefaultIdeBaseClass() throws ColaExecutionException {
         // Given
         final File ideClass = new File(TARGET_DIR + separator + toOSPath(config.getProperty("default.ide.class")) + ".class");
         final File renamedIdeClass = new File(TARGET_DIR + separator + toOSPath(config.getProperty("default.ide.class")) + "_renamed");
@@ -101,39 +101,39 @@ public class ColaMainTest {
         renamedIdeClass.renameTo(ideClass);
 
         // Then
-        verify(logger).info(config.info("missing.default.ide.class"));
+        assertThat(logger.getLoggingEvents(), hasItem(info(config.info("missing.default.ide.class"))));
     }
 
     @Test
-    public void shouldProcessDefaultIdeBaseClass() throws MojoExecutionException {
+    public void shouldProcessDefaultIdeBaseClass() throws ColaExecutionException {
         // When
         uut.execute(classes);
 
         // Then
-        verify(logger).info(config.info("found.default.ide.class"));
+        assertThat(logger.getLoggingEvents(), hasItem(info(config.info("found.default.ide.class"))));
     }
 
     @Test
-    public void shouldFindProvidedIdeBaseClass() throws MojoExecutionException {
+    public void shouldFindProvidedIdeBaseClass() throws ColaExecutionException {
         // Given
         final String ideClass = toOSPath(config.getProperty("default.ide.class"));
-        uut = new ColaMain(TARGET_DIR, getClass().getClassLoader(), ideClass, null, logger);
+        uut = new ColaMain(TARGET_DIR, getClass().getClassLoader(), ideClass, null);
 
         // When
         uut.execute(classes);
 
         // Then
-        verify(logger).info(config.info("processing") + TARGET_DIR + separator + ideClass + ".class");
+        assertThat(logger.getLoggingEvents(), hasItem(info(config.info("processing") + TARGET_DIR + separator + ideClass + ".class")));
     }
 
     // In order to have the following test pass the class has to be recompiled.
     @Test
-    public void shouldFindProvidedIdeBaseClassTest() throws MojoExecutionException {
+    public void shouldFindProvidedIdeBaseClassTest() throws ColaExecutionException {
         // Given
         final String ideClass = toOSPath(config.getProperty("default.ide.class"));
         final File testClassFile = new File(TARGET_DIR + separator + ideClass + ".class");
         final long initialSize = testClassFile.length();
-        uut = new ColaMain(TARGET_DIR, getClass().getClassLoader(), ideClass, "toBeRemoved", logger);
+        uut = new ColaMain(TARGET_DIR, getClass().getClassLoader(), ideClass, "toBeRemoved");
 
         // When
         uut.execute(classes);
@@ -144,7 +144,7 @@ public class ColaMainTest {
     }
 
     @Test
-    public void shouldProcessTestClasses() throws MojoExecutionException {
+    public void shouldProcessTestClasses() throws ColaExecutionException {
         // Given
         final File testClassFile = new File(TARGET_DIR + separator + testClass);
         final long initialSize = testClass.length();
@@ -157,8 +157,8 @@ public class ColaMainTest {
         assertThat(initialSize < finalSize, is(true));
     }
 
-    @Test(expected = MojoExecutionException.class)
-    public void shouldThrowMojExecutionExceptionOnInvalidClasses() throws MojoExecutionException {
+    @Test(expected = ColaExecutionException.class)
+    public void shouldThrowMojExecutionExceptionOnInvalidClasses() throws ColaExecutionException {
         // Given
         classes.add(toOSPath("this/path/takes/to/nowhere/NotFountTest.class"));
 
@@ -184,7 +184,7 @@ public class ColaMainTest {
 
         // Then
         assertThat(uut.getFailures().size(), is(3));
-        verify(logger).error(format(config.error("failed.tests"), 3, 4));
+        assertThat(logger.getLoggingEvents(), hasItem(error(format(config.error("failed.tests"), 3, 4))));
     }
 
     private static String toOSPath(final String value) {

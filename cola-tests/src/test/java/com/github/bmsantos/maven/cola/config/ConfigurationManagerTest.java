@@ -18,7 +18,7 @@ public class ConfigurationManagerTest {
         final String name = config.getProperty("app.name");
 
         // Then
-        assertThat(name, is("cola-maven-plugin"));
+        assertThat(name, is("cola-tests"));
     }
 
     @Test

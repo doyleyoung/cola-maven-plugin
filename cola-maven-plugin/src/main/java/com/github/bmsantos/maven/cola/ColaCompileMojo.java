@@ -8,6 +8,7 @@ import java.net.URLClassLoader;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.slf4j.impl.StaticLoggerBinder;
 
 import com.github.bmsantos.maven.cola.main.ColaMain;
 
@@ -32,14 +33,15 @@ import com.github.bmsantos.maven.cola.main.ColaMain;
  * @description Process BDD scenarios and inject JUnit tests into Cola Tests.
  */
 @Mojo(name = "compile", requiresProject = true, threadSafe = false, requiresDependencyResolution = TEST,
-defaultPhase = PROCESS_TEST_CLASSES)
+    defaultPhase = PROCESS_TEST_CLASSES)
 public class ColaCompileMojo extends BaseColaMojo {
 
     @Override
     public void execute() throws MojoExecutionException {
         try (final URLClassLoader classLoader = getTestClassLoader()) {
-            final ColaMain main = new ColaMain(targetTestDirectory, classLoader, 
-                ideBaseClass, ideBaseClassTest, getLog());
+            StaticLoggerBinder.getSingleton().setMavenLog(getLog());
+
+            final ColaMain main = new ColaMain(targetTestDirectory, classLoader, ideBaseClass, ideBaseClassTest);
 
             main.execute(getClasses());
         } catch (final Throwable t) {
