@@ -5,9 +5,9 @@
 
     <parent>
         <groupId>com.github.bmsantos</groupId>
-        <artifactId>cola-maven-plugin-base</artifactId>
+        <artifactId>cola-tests-base</artifactId>
         <version>0.0.3-SNAPSHOT</version>
-        <relativePath>../cola-maven-plugin-base/pom.xml</relativePath>
+        <relativePath>../cola-tests-base/pom.xml</relativePath>
     </parent>
 
     <artifactId>cola-tests-compiler</artifactId>

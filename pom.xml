@@ -28,6 +28,7 @@
     </licenses>
 
     <modules>
+        <module>cola-tests-base</module>
         <module>cola-maven-plugin-base</module>
         <module>cola-tests</module>
         <module>cola-tests-compiler</module>
