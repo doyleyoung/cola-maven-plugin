@@ -10,6 +10,9 @@ import static java.io.File.separator;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 
 public class ColaUtilsTest {
@@ -36,6 +39,52 @@ public class ColaUtilsTest {
     public void shouldNotBeSetOnEmpty() {
         // Given
         final String value = "";
+
+        // When / Then
+        assertThat(isSet(value), is(false));
+    }
+
+    @Test
+    public void shoulBeSetByObject() {
+        // Given
+        final Object value = new Object();
+
+        // When / Then
+        assertThat(isSet(value), is(true));
+    }
+
+    @Test
+    public void shouldNotBeSetOnNullByObject() {
+        // Given
+        final Object value = null;
+
+        // When / Then
+        assertThat(isSet(value), is(false));
+    }
+
+    @Test
+    public void shoulBeSetByList() {
+        // Given
+        final List<Object> value = new ArrayList<>();
+        value.add(new Object());
+
+        // When / Then
+        assertThat(isSet(value), is(true));
+    }
+
+    @Test
+    public void shouldNotBeSetOnNullByList() {
+        // Given
+        final List<Object> value = null;
+
+        // When / Then
+        assertThat(isSet(value), is(false));
+    }
+
+    @Test
+    public void shouldNotBeSetOnEmptyByList() {
+        // Given
+        final List<Object> value = new ArrayList<>();
 
         // When / Then
         assertThat(isSet(value), is(false));

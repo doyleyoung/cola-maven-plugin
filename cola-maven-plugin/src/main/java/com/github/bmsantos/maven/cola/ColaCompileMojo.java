@@ -5,12 +5,15 @@ import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_TEST_C
 import static org.apache.maven.plugins.annotations.ResolutionScope.TEST;
 
 import java.net.URLClassLoader;
+import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.slf4j.impl.StaticLoggerBinder;
 
 import com.github.bmsantos.maven.cola.main.ColaMain;
+import com.github.bmsantos.maven.cola.provider.IColaProvider;
+import com.github.bmsantos.maven.cola.provider.MavenColaProvider;
 
 /*
  * Copyright 2001-2005 The Apache Software Foundation.
@@ -33,17 +36,27 @@ import com.github.bmsantos.maven.cola.main.ColaMain;
  * @description Process BDD scenarios and inject JUnit tests into Cola Tests.
  */
 @Mojo(name = "compile", requiresProject = true, threadSafe = false, requiresDependencyResolution = TEST,
-    defaultPhase = PROCESS_TEST_CLASSES)
+defaultPhase = PROCESS_TEST_CLASSES)
 public class ColaCompileMojo extends BaseColaMojo {
 
     @Override
+    @SuppressWarnings("unchecked")
     public void execute() throws MojoExecutionException {
-        try (final URLClassLoader classLoader = getTestClassLoader()) {
+        try {
             StaticLoggerBinder.getSingleton().setMavenLog(getLog());
 
-            final ColaMain main = new ColaMain(targetTestDirectory, classLoader, ideBaseClass, ideBaseClassTest);
+            List<String> deltas = null;
+            if (context != null) {
+                deltas = (List<String>) context.getValue("colaDeltas");
+            }
 
-            main.execute(getClasses());
+            final IColaProvider provider = new MavenColaProvider(targetTestDirectory,
+                project.getTestClasspathElements(), includes, excludes, deltas);
+
+            try (final URLClassLoader classLoader = provider.getTargetClassLoader()) {
+                final ColaMain main = new ColaMain(ideBaseClass, ideBaseClassTest);
+                main.execute(provider);
+            }
         } catch (final Throwable t) {
             throw new MojoExecutionException(config.error("mojo"), t);
         }

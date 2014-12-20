@@ -10,16 +10,25 @@
         <relativePath>../cola-maven-plugin-base/pom.xml</relativePath>
     </parent>
 
-    <artifactId>cola-tests</artifactId>
+    <artifactId>cola-tests-compiler</artifactId>
     <packaging>jar</packaging>
 
-    <name>cola-tests</name>
+    <name>cola-tests-compiler</name>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.bmsantos</groupId>
+            <artifactId>cola-tests</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- 3rd Party dependencies -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
         </dependency>
         <dependency>
             <groupId>org.ow2.asm</groupId>
@@ -52,10 +61,6 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>uk.org.lidalia</groupId>
-            <artifactId>slf4j-test</artifactId>
         </dependency>
     </dependencies>
 
@@ -101,7 +106,21 @@
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
+                <groupId>com.jolira</groupId>
+                <artifactId>onejar-maven-plugin</artifactId>
+                <version>1.4.4</version>
+                <configuration>
+                    <mainClass>com.github.bmsantos.maven.cola.Application</mainClass>
+                    <attachToBuild>true</attachToBuild>
+                    <filename>colac.jar</filename>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>one-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -6,16 +6,13 @@ import static com.github.bmsantos.maven.cola.utils.ColaUtils.binaryFileExists;
 import static com.github.bmsantos.maven.cola.utils.ColaUtils.binaryToOsClass;
 import static com.github.bmsantos.maven.cola.utils.ColaUtils.classToBinary;
 import static com.github.bmsantos.maven.cola.utils.ColaUtils.isSet;
-import static java.io.File.separator;
 import static java.lang.String.format;
 import static org.objectweb.asm.ClassWriter.COMPUTE_MAXS;
 import static org.objectweb.asm.Opcodes.ASM4;
 
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,22 +27,19 @@ import com.github.bmsantos.maven.cola.exceptions.ColaExecutionException;
 import com.github.bmsantos.maven.cola.formatter.FeatureDetails;
 import com.github.bmsantos.maven.cola.injector.InjectorClassVisitor;
 import com.github.bmsantos.maven.cola.injector.MethodRemoverClassVisitor;
+import com.github.bmsantos.maven.cola.provider.IColaProvider;
 
 public class ColaMain {
 
     private static Logger log = LoggerFactory.getLogger(ColaMain.class);
 
-    private final ClassLoader classLoader;
-    private final String testClassDirectory;
+    private IColaProvider provider;
     private String ideBaseClass;
     private String ideBaseClassTest;
 
     private List<String> failures;
 
-    public ColaMain(final String testClassDirectory, final ClassLoader classLoader, final String ideBaseClass,
-        final String ideBaseClassTest) {
-        this.testClassDirectory = testClassDirectory.endsWith(separator) ? testClassDirectory : testClassDirectory + separator;
-        this.classLoader = classLoader;
+    public ColaMain(final String ideBaseClass, final String ideBaseClassTest) {
         this.ideBaseClass = ideBaseClass;
         this.ideBaseClassTest = ideBaseClassTest;
     }
@@ -54,25 +48,27 @@ public class ColaMain {
         return failures;
     }
 
-    public void execute(final List<String> classes) throws ColaExecutionException {
+    public void execute(final IColaProvider provider) throws ColaExecutionException {
+        this.provider = provider;
+
         failures = new ArrayList<>();
 
-        if (classes == null || classes.isEmpty()) {
+        if (!isSet(provider) || !isSet(provider.getTargetClasses())) {
             return;
         }
 
         if (isValidIdeBaseClass()) {
             try {
                 ideBaseClass = processIdeBaseClass();
-                classes.remove(ideBaseClass);
+                provider.getTargetClasses().remove(ideBaseClass);
             } catch (final Throwable t) {
                 log.info(config.error("failed.ide"), t);
             }
         }
 
-        for (final String className : classes) {
+        for (final String className : provider.getTargetClasses()) {
             try {
-                final Class<?> annotatedClass = classLoader.loadClass(classToBinary(className));
+                final Class<?> annotatedClass = provider.getTargetClassLoader().loadClass(classToBinary(className));
 
                 final List<FeatureDetails> featureList = loadFeaturesFrom(annotatedClass);
 
@@ -89,7 +85,7 @@ public class ColaMain {
         }
 
         if (!failures.isEmpty()) {
-            log.error(format(config.error("failed.tests"), failures.size(), classes.size()));
+            log.error(format(config.error("failed.tests"), failures.size(), provider.getTargetClasses().size()));
             for (final String failure : failures) {
                 log.error(failure);
             }
@@ -98,7 +94,7 @@ public class ColaMain {
         }
     }
 
-    private String processIdeBaseClass() throws IOException {
+    private String processIdeBaseClass() throws Exception {
 
         ideBaseClass = binaryToOsClass(ideBaseClass);
 
@@ -116,14 +112,14 @@ public class ColaMain {
             ideBaseClassTest = config.getProperty("default.ide.test");
         }
 
-        if (binaryFileExists(testClassDirectory, ideBaseClass)) {
+        if (binaryFileExists(provider.getTargetDirectory(), ideBaseClass)) {
             return true;
         } else {
             // Try default
             log.info(config.info("missing.ide.class"));
 
             ideBaseClass = config.getProperty("default.ide.class");
-            if (binaryFileExists(testClassDirectory, ideBaseClass)) {
+            if (binaryFileExists(provider.getTargetDirectory(), ideBaseClass)) {
                 log.info(config.info("found.default.ide.class"));
                 return true;
             } else {
@@ -135,12 +131,12 @@ public class ColaMain {
     }
 
     private void processClass(final String className, final ClassWriter cw, final ClassVisitor classVisitor)
-        throws IOException, FileNotFoundException {
+        throws Exception {
 
-        final String filePath = testClassDirectory + className;
+        final String filePath = provider.getTargetDirectory() + className;
         log.info(config.info("processing") + filePath);
 
-        final InputStream in = classLoader.getResourceAsStream(className);
+        final InputStream in = provider.getTargetClassLoader().getResourceAsStream(className);
         final ClassReader classReader = new ClassReader(in);
         classReader.accept(classVisitor, 0);
 

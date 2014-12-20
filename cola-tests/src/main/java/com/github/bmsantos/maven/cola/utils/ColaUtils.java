@@ -3,15 +3,26 @@ package com.github.bmsantos.maven.cola.utils;
 import static java.io.File.separator;
 
 import java.io.File;
+import java.util.List;
 
 public final class ColaUtils {
+
+    public static final String CLASS_EXT = ".class";
 
     public static boolean isSet(final String value) {
         return value != null && !value.isEmpty();
     }
 
+    public static boolean isSet(final List<?> value) {
+        return value != null && !value.isEmpty();
+    }
+
+    public static boolean isSet(final Object value) {
+        return value != null;
+    }
+
     public static boolean isClassFile(final String name) {
-        return name.endsWith(".class");
+        return name.endsWith(CLASS_EXT);
     }
 
     public static String osToBinary(final String path) {
@@ -19,7 +30,7 @@ public final class ColaUtils {
     }
 
     public static String classToBinary(final String path) {
-        return osToBinary(path.replace(".class", ""));
+        return osToBinary(path.replace(CLASS_EXT, ""));
     }
 
     public static String binaryToOS(final String binaryFormat) {
@@ -29,7 +40,7 @@ public final class ColaUtils {
     public static String binaryToOsClass(final String binaryFormat) {
         String result = binaryToOS(binaryFormat);
         if (!isClassFile(result)) {
-            result += ".class";
+            result += CLASS_EXT;
         }
         return result;
     }

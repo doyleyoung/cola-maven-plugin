@@ -30,6 +30,7 @@
     <modules>
         <module>cola-maven-plugin-base</module>
         <module>cola-tests</module>
+        <module>cola-tests-compiler</module>
         <module>cola-maven-plugin</module>
         <module>cola-maven-plugin-test</module>
     </modules>

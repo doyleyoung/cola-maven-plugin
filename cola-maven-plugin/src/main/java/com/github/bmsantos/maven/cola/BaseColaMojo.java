@@ -16,27 +16,13 @@ package com.github.bmsantos.maven.cola;
  * limitations under the License.
  */
 
-import static java.lang.System.getProperties;
-import static java.util.Arrays.asList;
-
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.DirectoryScanner;
 import org.sonatype.plexus.build.incremental.BuildContext;
 
 public abstract class BaseColaMojo extends AbstractMojo {
-
-    private static final String CLASS_EXT = ".class";
 
     @Component
     protected MavenProject project;
@@ -81,64 +67,4 @@ public abstract class BaseColaMojo extends AbstractMojo {
      */
     @Parameter(defaultValue = "true")
     protected Boolean log;
-
-    @SuppressWarnings("unchecked")
-    protected URLClassLoader getTestClassLoader() throws MalformedURLException, DependencyResolutionRequiredException {
-        final List<URL> urls = new ArrayList<>();
-
-        final List<String> paths = project.getTestClasspathElements();
-        for (final String path : paths) {
-            urls.add(new File(path).toURI().toURL());
-        }
-
-        return new URLClassLoader(urls.toArray(new URL[urls.size()]), BaseColaMojo.class.getClassLoader());
-    }
-
-    @SuppressWarnings("unchecked")
-    protected List<String> getClasses() {
-
-        if (context != null) {
-            final List<String> deltas = (List<String>) context.getValue("colaDeltas");
-            if (deltas != null) {
-                return deltas;
-            }
-        }
-
-        final String[] resolvedIncludes = resolveIncludes();
-
-        final DirectoryScanner scanner = new DirectoryScanner();
-        if (resolvedIncludes != null && resolvedIncludes.length > 0) {
-            scanner.setIncludes(resolvedIncludes);
-        }
-        if (excludes != null && excludes.length > 0) {
-            scanner.setExcludes(excludes);
-        }
-        scanner.setBasedir(targetTestDirectory);
-        scanner.setCaseSensitive(true);
-        scanner.scan();
-
-        return new ArrayList<String>(asList(scanner.getIncludedFiles()));
-    }
-
-    protected String[] resolveIncludes() {
-        final List<String> list = new ArrayList<>();
-        final String test = getProperties().getProperty("test");
-        final String itTest = getProperties().getProperty("it.test");
-
-        if (test != null) {
-            list.add(test.endsWith(CLASS_EXT) ? test : test + CLASS_EXT);
-        }
-        if (itTest != null) {
-            list.add(itTest.endsWith(CLASS_EXT) ? itTest : itTest + CLASS_EXT);
-        }
-        if (!list.isEmpty()) {
-            return list.toArray(new String[list.size()]);
-        }
-
-        if (includes != null && includes.length > 0) {
-            return includes;
-        }
-
-        return null;
-    }
 }
