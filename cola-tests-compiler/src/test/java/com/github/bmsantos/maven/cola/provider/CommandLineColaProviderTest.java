@@ -2,6 +2,7 @@ package com.github.bmsantos.maven.cola.provider;
 
 import static com.github.bmsantos.maven.cola.utils.ColaUtils.CLASS_EXT;
 import static com.github.bmsantos.maven.cola.utils.ColaUtils.binaryToOsClass;
+import static com.github.bmsantos.maven.cola.utils.ColaUtils.toOSPath;
 import static java.lang.System.getProperties;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -16,7 +17,7 @@ import org.junit.Test;
 
 public class CommandLineColaProviderTest {
 
-    private final String targetDirectory = "target/test-classes/";
+    private final String targetDirectory = toOSPath("target/test-classes/");
 
     private CommandLineColaProvider uut;
 
@@ -37,7 +38,7 @@ public class CommandLineColaProviderTest {
     @Test
     public void shouldReturnNormalizedTargetDirectory() {
         // When
-        uut = new CommandLineColaProvider("target/test-classes");
+        uut = new CommandLineColaProvider(toOSPath("target/test-classes"));
 
         // Then
         assertThat(uut.getTargetDirectory(), is(targetDirectory));

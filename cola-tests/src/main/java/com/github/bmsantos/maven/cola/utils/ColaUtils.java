@@ -48,4 +48,8 @@ public final class ColaUtils {
     public static boolean binaryFileExists(final String dir, final String clazz) {
         return isSet(dir) && isSet(clazz) && new File(dir + separator + binaryToOsClass(clazz)).exists();
     }
+
+    public static String toOSPath(final String path) {
+        return path.replace("/", separator).replace("\\", separator);
+    }
 }
