@@ -1,4 +1,4 @@
-package com.github.bmsantos.maven.cola.provider;
+package com.github.bmsantos.compiler.cola.provider;
 
 import static com.github.bmsantos.core.cola.utils.ColaUtils.CLASS_EXT;
 import static java.io.File.separator;
@@ -13,22 +13,15 @@ import java.util.List;
 
 import org.codehaus.plexus.util.DirectoryScanner;
 
+import com.github.bmsantos.compiler.cola.Application;
 import com.github.bmsantos.core.cola.provider.IColaProvider;
 
-public class MavenColaProvider implements IColaProvider {
+public class CommandLineColaProvider implements IColaProvider {
 
     private final String targetDirectory;
-    private final List<String> classpathElements, deltas;
-    private final String[] includes, excludes;
 
-    public MavenColaProvider(final String targetDirectory, final List<String> classpathElements,
-        final String[] includes, final String[] excludes, final List<String> deltas) {
-
+    public CommandLineColaProvider(final String targetDirectory) {
         this.targetDirectory = targetDirectory.endsWith(separator) ? targetDirectory : targetDirectory + separator;
-        this.classpathElements = classpathElements;
-        this.includes = includes;
-        this.excludes = excludes;
-        this.deltas = deltas;
     }
 
     @Override
@@ -40,28 +33,15 @@ public class MavenColaProvider implements IColaProvider {
     public URLClassLoader getTargetClassLoader() throws Exception {
         final List<URL> urls = new ArrayList<>();
 
-        for (final String path : classpathElements) {
-            urls.add(new File(path).toURI().toURL());
-        }
+        urls.add(new File(targetDirectory).toURI().toURL());
 
-        return new URLClassLoader(urls.toArray(new URL[urls.size()]), MavenColaProvider.class.getClassLoader());
+        return new URLClassLoader(urls.toArray(new URL[urls.size()]), Application.class.getClassLoader());
     }
 
     @Override
     public List<String> getTargetClasses() {
-        if (deltas != null) {
-            return deltas;
-        }
-
-        final String[] resolvedIncludes = resolveIncludes();
-
         final DirectoryScanner scanner = new DirectoryScanner();
-        if (resolvedIncludes != null && resolvedIncludes.length > 0) {
-            scanner.setIncludes(resolvedIncludes);
-        }
-        if (excludes != null && excludes.length > 0) {
-            scanner.setExcludes(excludes);
-        }
+        scanner.setIncludes(resolveIncludes());
         scanner.setBasedir(targetDirectory);
         scanner.setCaseSensitive(true);
         scanner.scan();
@@ -69,7 +49,7 @@ public class MavenColaProvider implements IColaProvider {
         return new ArrayList<String>(asList(scanner.getIncludedFiles()));
     }
 
-    protected String[] resolveIncludes() {
+    private String[] resolveIncludes() {
         final List<String> list = new ArrayList<>();
         final String test = getProperties().getProperty("test");
         final String itTest = getProperties().getProperty("it.test");
@@ -80,14 +60,12 @@ public class MavenColaProvider implements IColaProvider {
         if (itTest != null) {
             list.add(itTest.endsWith(CLASS_EXT) ? itTest : itTest + CLASS_EXT);
         }
-        if (!list.isEmpty()) {
-            return list.toArray(new String[list.size()]);
+
+        if (list.isEmpty()) {
+            list.add("**/*.class");
         }
 
-        if (includes != null && includes.length > 0) {
-            return includes;
-        }
-
-        return null;
+        return list.toArray(new String[list.size()]);
     }
+
 }

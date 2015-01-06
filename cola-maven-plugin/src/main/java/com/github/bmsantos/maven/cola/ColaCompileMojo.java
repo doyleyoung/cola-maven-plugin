@@ -1,6 +1,6 @@
 package com.github.bmsantos.maven.cola;
 
-import static com.github.bmsantos.maven.cola.config.ConfigurationManager.config;
+import static com.github.bmsantos.core.cola.config.ConfigurationManager.config;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_TEST_CLASSES;
 import static org.apache.maven.plugins.annotations.ResolutionScope.TEST;
 
@@ -11,8 +11,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.slf4j.impl.StaticLoggerBinder;
 
-import com.github.bmsantos.maven.cola.main.ColaMain;
-import com.github.bmsantos.maven.cola.provider.IColaProvider;
+import com.github.bmsantos.core.cola.main.ColaMain;
+import com.github.bmsantos.core.cola.provider.IColaProvider;
 import com.github.bmsantos.maven.cola.provider.MavenColaProvider;
 
 /*

@@ -3,11 +3,11 @@ package com.github.bmsantos.maven.cola;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import com.github.bmsantos.maven.cola.story.annotations.Feature;
-import com.github.bmsantos.maven.cola.story.annotations.Given;
-import com.github.bmsantos.maven.cola.story.annotations.Projection;
-import com.github.bmsantos.maven.cola.story.annotations.Then;
-import com.github.bmsantos.maven.cola.story.annotations.When;
+import com.github.bmsantos.core.cola.story.annotations.Feature;
+import com.github.bmsantos.core.cola.story.annotations.Given;
+import com.github.bmsantos.core.cola.story.annotations.Projection;
+import com.github.bmsantos.core.cola.story.annotations.Then;
+import com.github.bmsantos.core.cola.story.annotations.When;
 
 public class ExamplesColaTest extends BaseColaTest {
 

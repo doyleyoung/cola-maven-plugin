@@ -1,4 +1,4 @@
-package com.github.bmsantos.maven.cola.provider;
+package com.github.bmsantos.compiler.cola.provider;
 
 import static com.github.bmsantos.core.cola.utils.ColaUtils.CLASS_EXT;
 import static com.github.bmsantos.core.cola.utils.ColaUtils.binaryToOsClass;
@@ -10,24 +10,22 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertThat;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class MavenColaProviderTest {
+import com.github.bmsantos.compiler.cola.provider.CommandLineColaProvider;
+
+public class CommandLineColaProviderTest {
+
     private final String targetDirectory = toOSPath("target/test-classes/");
 
-    private MavenColaProvider uut;
-    private String[] includes, excludes;
-    private List<String> classpathElements, deltas;
+    private CommandLineColaProvider uut;
 
     @Before
     public void setUp() {
-        classpathElements = new ArrayList<>();
-
-        uut = new MavenColaProvider(targetDirectory, classpathElements, includes, excludes, deltas);
+        uut = new CommandLineColaProvider(targetDirectory);
 
         getProperties().remove("test");
         getProperties().remove("it.test");
@@ -42,7 +40,7 @@ public class MavenColaProviderTest {
     @Test
     public void shouldReturnNormalizedTargetDirectory() {
         // When
-        uut = new MavenColaProvider(toOSPath("target/test-classes"), classpathElements, includes, excludes, deltas);
+        uut = new CommandLineColaProvider(toOSPath("target/test-classes"));
 
         // Then
         assertThat(uut.getTargetDirectory(), is(targetDirectory));
@@ -104,20 +102,6 @@ public class MavenColaProviderTest {
         // Then
         assertThat(classes.isEmpty(), is(false));
         assertThat(classes, contains(binaryToOsClass(getClass().getCanonicalName())));
-    }
-
-    @Test
-    public void shouldGetDeltas() {
-        // Given
-        deltas = new ArrayList<>();
-
-        uut = new MavenColaProvider(targetDirectory, classpathElements, includes, excludes, deltas);
-
-        // When
-        final List<String> classes = uut.getTargetClasses();
-
-        // Then
-        assertThat(classes, is(deltas));
     }
 
 }

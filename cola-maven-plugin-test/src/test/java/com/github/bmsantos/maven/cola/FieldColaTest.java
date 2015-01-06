@@ -6,10 +6,10 @@ import static org.junit.Assert.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.bmsantos.maven.cola.story.annotations.Feature;
-import com.github.bmsantos.maven.cola.story.annotations.Given;
-import com.github.bmsantos.maven.cola.story.annotations.Then;
-import com.github.bmsantos.maven.cola.story.annotations.When;
+import com.github.bmsantos.core.cola.story.annotations.Feature;
+import com.github.bmsantos.core.cola.story.annotations.Given;
+import com.github.bmsantos.core.cola.story.annotations.Then;
+import com.github.bmsantos.core.cola.story.annotations.When;
 
 public class FieldColaTest extends BaseColaTest {
 
