@@ -139,9 +139,4 @@
         </profile>
     </profiles>
 
-    <scm>
-        <url>git@github.com:bmsantos/cola-maven-plugin.git</url>
-        <connection>scm:git:git@github.com:bmsantos/cola-maven-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:bmsantos/cola-maven-plugin.git</developerConnection>
-    </scm>
 </project>
