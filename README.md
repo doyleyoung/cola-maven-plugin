@@ -2,22 +2,21 @@ OSX/Linux CI: [![Travis Build Status](https://travis-ci.org/bmsantos/cola-maven-
 
 Windows CI: [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/3k6ewjhnvr2itn9c)](https://ci.appveyor.com/project/bmsantos/cola-maven-plugin)
 
-cola-maven-plugin
-==================
+#cola-maven-plugin
 
 JUnit + BDD = COLA Maven Plugin
 
 COLA Test [Web Site](http://bmsantos.github.io/cola-maven-plugin/)
 
-Current version: 0.0.2
+Current version: 0.0.3
 
-Current snapshot (non-production): 0.0.3-SNAPSHOT
+Current snapshot (non-production): 0.0.4-SNAPSHOT
 
-Setup:
+###Maven Setup:
 ```xml
 
     <properties>
-        <cola.version>0.0.2</cola.version>
+        <cola.version>0.0.3</cola.version>
     </properties>
 
     <!-- If using snapshot uncomment the next snapshot repo defenition -->
@@ -42,7 +41,7 @@ Setup:
     <dependencies>
         <dependency>
             <groupId>com.github.bmsantos</groupId>
-            <artifactId>cola-maven-plugin</artifactId>
+            <artifactId>cola-tests</artifactId>
             <version>${cola.version}</version>
         </dependency>
 
