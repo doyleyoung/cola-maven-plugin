@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>cola-maven-plugin</artifactId>
+  <version>0.0.4-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>cola-maven-plugin</name>
