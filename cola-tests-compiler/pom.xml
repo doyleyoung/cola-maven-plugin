@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>com.github.bmsantos</groupId>
         <artifactId>cola-tests-base</artifactId>
-        <version>0.0.3-SNAPSHOT</version>
+        <version>0.0.3</version>
         <relativePath>../cola-tests-base/pom.xml</relativePath>
     </parent>
 
@@ -19,7 +18,7 @@
         <dependency>
             <groupId>com.github.bmsantos</groupId>
             <artifactId>cola-tests</artifactId>
-            <version>${project.version}</version>
+            <version>0.0.3</version>
         </dependency>
         <!-- 3rd Party dependencies -->
         <dependency>
@@ -125,4 +124,9 @@
         </plugins>
     </build>
 
+    <scm>
+        <url>git@github.com:bmsantos/cola-maven-plugin.git</url>
+        <connection>scm:git:git@github.com:bmsantos/cola-maven-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:bmsantos/cola-maven-plugin.git</developerConnection>
+    </scm>
 </project>
