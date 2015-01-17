@@ -41,9 +41,9 @@ code {
 pre code { background: none; display: block; }
 pre {
   display: block;
-  margin: 20px 5%;
+  /* margin: 20px 5%; */
   padding: 4px 8px;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.7);
   word-wrap: break-word;
 }
 
