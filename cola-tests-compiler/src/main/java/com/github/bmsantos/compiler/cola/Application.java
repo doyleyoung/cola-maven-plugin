@@ -1,5 +1,6 @@
 package com.github.bmsantos.compiler.cola;
 
+import static com.github.bmsantos.core.cola.config.ConfigurationManager.config;
 import static java.lang.System.out;
 
 import java.net.URLClassLoader;
@@ -14,6 +15,9 @@ import com.github.bmsantos.core.cola.main.ColaMain;
 public class Application {
 
     private static final String ERR_MSG_FAILED_COMPILATION = "Failed to compile COLA Tests: ";
+
+    @Parameter(names = { "-v", "--version" }, description = "Print out version information")
+    private boolean version;
 
     @Parameter(names = { "-h", "--help" }, description = "Print this guide")
     private boolean help;
@@ -53,7 +57,10 @@ public class Application {
                 }
             }
         } catch (final ParameterException e) {
-            if (!app.help) {
+            if (app.version) {
+                app.printVersion(jc);
+                return;
+            } else if (!app.help) {
                 out.println(ERR_MSG_FAILED_COMPILATION + e.getMessage());
             }
         } catch (final Throwable t) {
@@ -64,4 +71,11 @@ public class Application {
         }
         jc.usage();
     }
+
+    private void printVersion(final JCommander jCommander) {
+        final StringBuilder builder = new StringBuilder(config.getProperty("app.name"));
+        builder.append(" ").append(config.getProperty("app.version"));
+        System.out.println(builder);
+    }
+
 }
