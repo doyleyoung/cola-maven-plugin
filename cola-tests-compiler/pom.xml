@@ -110,7 +110,7 @@
                 <artifactId>onejar-maven-plugin</artifactId>
                 <version>1.4.4</version>
                 <configuration>
-                    <mainClass>com.github.bmsantos.maven.cola.Application</mainClass>
+                    <mainClass>com.github.bmsantos.compiler.cola.Application</mainClass>
                     <attachToBuild>true</attachToBuild>
                     <filename>colac.jar</filename>
                 </configuration>
