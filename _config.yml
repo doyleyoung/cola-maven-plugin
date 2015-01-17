@@ -12,7 +12,7 @@ timezone: null
 lsi: false
 markdown: kramdown
 highlighter: pygments
-
+url: /cola-maven-plugin/
 
 ### content configuration ###
 title:       "cola tests - bdd + junit"
