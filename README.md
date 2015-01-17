@@ -2,6 +2,8 @@ OSX/Linux CI: [![Travis Build Status](https://travis-ci.org/bmsantos/cola-maven-
 
 Windows CI: [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/3k6ewjhnvr2itn9c)](https://ci.appveyor.com/project/bmsantos/cola-maven-plugin)
 
+Questions? [!Join Chat](https://badges.gitter.im/Join Chat.svg)(https://gitter.im/bmsantos/cola-maven-plugin)
+
 #cola-maven-plugin
 
 JUnit + BDD = COLA Maven Plugin
