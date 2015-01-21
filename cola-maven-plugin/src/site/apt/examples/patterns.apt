@@ -1,0 +1,46 @@
+ ------
+ Basic Configuration
+ ------
+ Bruno Santos
+ ------
+ 2015-01-20
+ ------
+
+Include/Exclude Patterns Configuration
+
+ The plugin can be configured with normal maven include and/or exclude patterns.
+
++---+
+<project>
+  <!-- ... -->
+  <build>
+    <plugins>
+      <!-- ... -->
+      <plugin>
+        <groupId>com.github.bmsantos</groupId>
+        <artifactId>cola-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <configuration>
+          <includes>
+            <include>**/*Test.class</include>
+          </includes>
+          <excludes>
+            <exclude>**/ExcludedTest.class</exclude>
+          </excludes>
+        </configuration>
+        <executions>
+          <execution>
+            <id>compile-cola-tests</id>
+            <phase>process-test-classes</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- ... -->
+    </plugins>
+  </build>
+  <!-- ... -->
+</project>
++---+

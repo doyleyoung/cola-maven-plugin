@@ -1,0 +1,39 @@
+ ------
+ Basic Configuration
+ ------
+ Bruno Santos
+ ------
+ 2015-01-20
+ ------
+
+Basic Configuration
+
+  The only requirement for COLA Tests Maven Plugin is to be defined.
+  The plugin will look into the project test target directory and compile all cola tests classes as they are found.
+
++---+
+<project>
+  <!-- ... -->
+  <build>
+    <plugins>
+      <!-- ... -->
+      <plugin>
+        <groupId>com.github.bmsantos</groupId>
+        <artifactId>cola-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <executions>
+          <execution>
+            <id>compile-cola-tests</id>
+            <phase>process-test-classes</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- ... -->
+    </plugins>
+  </build>
+  <!-- ... -->
+</project>
++---+

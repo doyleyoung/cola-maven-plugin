@@ -1,0 +1,71 @@
+ ------
+ Usage
+ ------
+ Bruno Santos
+ ------
+ 2015-01-20
+ ------
+
+Usage
+
+  This document is intended to provide instructions for using the COLA Tests Maven Plugin.\
+  In order for this discussion to be useful, it's critical to cover two topics:
+
+    [[1]] Configuring your project's <<<pom.xml>>> to run the plugin during the project's build cycle
+
+    [[2]] Invoking the plugin from the command-line
+
+* Configure COLA Tests Maven Plugin
+
+  By tying the goals of the plugin to a phase in the build cycle, the specified goals will run each time that phase of the build cycle is executed. Doing this can make it easier to add the plugin to your project, because it eliminates the need to run the plugin standalone.
+
+  To bind the compile goal of the COLA Tests Maven Plugin to a phase in the build cycle, you will need to add the <<<execution>>> tag with the <<<goal>>> set to <<<cola>>>. Although not recommended, you can bind the plugin to a different build phase by using the <<<phase>>> option. COLA Tests require the test classes to be compiled before the compile goal is executed. By default the compile goal will execute during the <<process-tests-classes>> phase.
+
+  For a complete list of the available configuration options see {{{./cola-mojo.html}cola:compile}} goal overview page.
+
++---+
+<project>
+  <!-- ... -->
+  <build>
+    <plugins>
+      <!-- ... -->
+      <plugin>
+        <groupId>com.github.bmsantos</groupId>
+        <artifactId>cola-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <executions>
+          <execution>
+            <id>compile-cola-tests</id>
+            <phase>process-test-classes</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- ... -->
+    </plugins>
+  </build>
+  <!-- ... -->
+</project>
++---+
+
+* Invoke from the command-line
+
+Compile and execute COLA Tests using any phases are either the same of follows process-test-classes. For example:
+
++---+
+mvn clean test
++---+
+
+or
+
++---+
+mvn clean integration-test
++---+
+
+or
+
++---+
+mvn clean verify
++---+

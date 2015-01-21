@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <body>
+        <menu name="Overview">
+            <item name="Introduction" href="index.html" />
+            <item name="Goals" href="plugin-info.html" />
+            <item name="Usage" href="usage.html" />
+            <item name="FAQ" href="faq.html" />
+        </menu>
+        <menu name="Examples">
+            <item name="Basic Configuration" href="examples/basic.html" />
+            <item name="Using include/exclude Patterns" href="examples/patterns.html" />
+            <item name="IDE Configuration" href="examples/ide.html" />
+            <item name="COLA Tests Filtering" href="examples/filtering.html" />
+        </menu>
+        ${reports}
+    </body>
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.3.1</version>
+    </skin>
+    <custom>
+        <fluidoSkin>
+            <gitHub>
+                <projectId>bmsantos/cola-maven-plugin</projectId>
+                <ribbonOrientation>right</ribbonOrientation>
+                <ribbonColor>black</ribbonColor>
+            </gitHub>
+            <facebookLike />
+            <googlePlusOne />
+        </fluidoSkin>
+    </custom>
+</project>

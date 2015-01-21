@@ -1,0 +1,47 @@
+ ------
+ Basic Configuration
+ ------
+ Bruno Santos
+ ------
+ 2015-01-20
+ ------
+
+IDE Support Configuration
+
+ If running your tests from an IDE such as Eclipse of IDEA, you'll have to set the ide properties so that the IDEs can associate the test POJO with the actual JUnit test framework.
+ This is basically a work around because the JUnit IDE plugin depends on the source code to detect if the class is a JUnit POJO.
+
+ The simplest solution is to define an abstract class with a JUnit test method in it and have all your COLA Tests inherit from it. With this in place your COLA Test will be picked by JUnit IDE plugin for execution.
+ 
+ But it happens that you might not want to have that test executed at all. In order to remove the test from the actual JUnit test execution, simply set the class and test method name to be removed in the respective ideBaseClass and ideBaseClassTest configuration tags.
+
++---+
+<project>
+  <!-- ... -->
+  <build>
+    <plugins>
+      <!-- ... -->
+      <plugin>
+        <groupId>com.github.bmsantos</groupId>
+        <artifactId>cola-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <configuration>
+          <ideBaseClass>com.github.bmsantos.maven.cola.BaseColaTest</ideBaseClass>
+          <ideBaseClassTest>iWillBeRemoved</ideBaseClassTest>
+        </configuration>
+        <executions>
+          <execution>
+            <id>compile-cola-tests</id>
+            <phase>process-test-classes</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- ... -->
+    </plugins>
+  </build>
+  <!-- ... -->
+</project>
++---+

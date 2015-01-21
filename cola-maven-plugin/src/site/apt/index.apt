@@ -1,0 +1,37 @@
+ ------
+ Usage
+ ------
+ Bruno Santos
+ ------
+ 2015-01-20
+ ------
+
+COLA Tests Maven Plugin
+
+  This plugin is used to automatically compile your {{{http://bmsantos.github.io/cola-maven-plugin/}COLA Tests}}. 
+  
+  COLA Tests is a BDD framework that uses Gherkin syntax to describe your JUnit tests with @Given, @When and @Then annotations. 
+
+  Under the hood, the plugin will detect the cola tests and inject the required JUnit Tests to execute the intended BDD scenarios.
+
+* Goals Overview
+
+  * {{{./cola-mojo.html}cola:compile}} compile COLA Tests classes.
+
+* Usage
+
+  General instructions on how to use the COLA Tests Maven Plugin can be found on the {{{./usage.html}usage page}}. Some more specific use cases are described in the examples given below.
+
+  If you feel like the plugin is missing a feature or has a defect, you can fill a feature request or bug report in our {{{./issue-tracking.html}issue tracker}}. When creating a new issue, please provide a comprehensive description of your concern. Especially for fixing bugs it is crucial that the developers can reproduce your problem. For this reason, entire debug logs, POMs or most preferably little demo projects attached to the issue are very much appreciated. Of course, patches are welcome, too. Contributors can check out the project from our {{{./source-repository.html}source repository}} and will find supplementary information in the {{{http://maven.apache.org/guides/development/guide-helping.html}guide to helping with Maven}}.
+
+* Examples
+
+  To provide you with better understanding of some usages of the COLA Tests Maven Plugin, you can take a look into the following examples:
+
+  * {{{./examples/basic.html}Basic Configuration}}
+
+  * {{{./examples/patterns.html}Using include/exclude patterns}}
+
+  * {{{./examples/ide.html}IDE Configuration}}
+
+  * {{{./examples/filtering.html}COLA Tests Filtering}}

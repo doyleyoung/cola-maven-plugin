@@ -1,0 +1,23 @@
+ ------
+ Basic Configuration
+ ------
+ Bruno Santos
+ ------
+ 2015-01-20
+ ------
+ 
+Filtering COLA Tests
+
+  COLA Tests classes can be filtered in the same way as Maven Surefire or Failsafe by making use of test and it.test system properties.
+
+  To match unit tests: 
+
+  +---+
+  mvn clean verify -Dtest=path/to/**/My*Tests
+  +---+
+
+  To match integration tests:
+
++---+
+  mvn clean verify -Dit.test=path/to/**/My*Tests
++---+
