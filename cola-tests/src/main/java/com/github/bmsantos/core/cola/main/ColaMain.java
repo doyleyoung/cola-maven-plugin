@@ -53,20 +53,25 @@ public class ColaMain {
 
         failures = new ArrayList<>();
 
-        if (!isSet(provider) || !isSet(provider.getTargetClasses())) {
+        if (!isSet(provider)) {
+            return;
+        }
+
+        final List<String> targetClasses = provider.getTargetClasses();
+        if (!isSet(targetClasses)) {
             return;
         }
 
         if (isValidIdeBaseClass()) {
             try {
                 ideBaseClass = processIdeBaseClass();
-                provider.getTargetClasses().remove(ideBaseClass);
+                targetClasses.remove(ideBaseClass);
             } catch (final Throwable t) {
                 log.info(config.error("failed.ide"), t);
             }
         }
 
-        for (final String className : provider.getTargetClasses()) {
+        for (final String className : targetClasses) {
             try {
                 final Class<?> annotatedClass = provider.getTargetClassLoader().loadClass(classToBinary(className));
 
@@ -85,7 +90,7 @@ public class ColaMain {
         }
 
         if (!failures.isEmpty()) {
-            log.error(format(config.error("failed.tests"), failures.size(), provider.getTargetClasses().size()));
+            log.error(format(config.error("failed.tests"), failures.size(), targetClasses.size()));
             for (final String failure : failures) {
                 log.error(failure);
             }
