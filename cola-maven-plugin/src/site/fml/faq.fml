@@ -6,7 +6,7 @@
             <answer>
                 <p>Classes can be filtered in the same way as Maven Surefire or Failsafe by making use of test and it.test system properties.</p>
                 <p>To match unit tests: mvn clean verify -Dtest=path/to/**/My*Tests</p>
-                <p>To match integration tests:mvn clean verify -Dit.test=path/to/**/My*Tests</p>
+                <p>To match integration tests: mvn clean verify -Dit.test=path/to/**/My*Tests</p>
             </answer>
         </faq>
     </part>

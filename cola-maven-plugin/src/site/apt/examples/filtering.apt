@@ -12,9 +12,9 @@ Filtering COLA Tests
 
   To match unit tests: 
 
-  +---+
++---+
   mvn clean verify -Dtest=path/to/**/My*Tests
-  +---+
++---+
 
   To match integration tests:
 

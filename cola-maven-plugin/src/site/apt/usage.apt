@@ -52,20 +52,20 @@ Usage
 
 * Invoke from the command-line
 
-Compile and execute COLA Tests using any phases are either the same of follows process-test-classes. For example:
+ Compile and execute COLA Tests using any phases are either the same of follows process-test-classes. For example:
 
 +---+
-mvn clean test
+  mvn clean test
 +---+
 
-or
+ or
 
 +---+
-mvn clean integration-test
+  mvn clean integration-test
 +---+
 
-or
+ or
 
 +---+
-mvn clean verify
+  mvn clean verify
 +---+
