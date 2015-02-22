@@ -1,6 +1,6 @@
 package com.github.bmsantos.core.cola.config;
 
-import static java.lang.Thread.currentThread;
+import static java.io.File.separator;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,8 +20,7 @@ public enum ConfigurationManager {
     public void loadProperties(final String name) {
         InputStream in = null;
         try {
-            final ClassLoader loader = currentThread().getContextClassLoader();
-            in = loader.getResourceAsStream(name);
+            in = ConfigurationManager.class.getResourceAsStream(separator + name);
             props.load(in);
             in.close();
         } catch (final IOException e) {
