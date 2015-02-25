@@ -10,15 +10,15 @@ JUnit + BDD = COLA Maven Plugin
 
 COLA Test [Web Site](http://bmsantos.github.io/cola-maven-plugin/)
 
-Current version: 0.0.3
+Current version: 0.1.0
 
-Current snapshot (non-production): 0.0.4-SNAPSHOT
+Current snapshot (non-production): 0.2.0-SNAPSHOT
 
 ###Maven Setup:
 ```xml
 
     <properties>
-        <cola.version>0.0.3</cola.version>
+        <cola.version>0.1.0</cola.version>
     </properties>
 
     <!-- If using snapshot uncomment the next snapshot repo defenition -->
@@ -63,7 +63,7 @@ Current snapshot (non-production): 0.0.4-SNAPSHOT
                 <version>${cola.version}</version>
                 <configuration>
                     <ideBaseClass>com.github.bmsantos.maven.cola.BaseColaTest</ideBaseClass>
-                    <ideBaseClassTest>iWillBeRemoved</ideBaseClassTest>
+                    <ideTestMethod>iWillBeRemoved</ideTestMethod>
                     <includes>
                         <include>**/*Test.class</include>
                     </includes>
