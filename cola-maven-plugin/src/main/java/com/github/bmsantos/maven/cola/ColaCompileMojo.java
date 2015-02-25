@@ -17,7 +17,6 @@ import com.github.bmsantos.maven.cola.provider.MavenColaProvider;
 
 /*
  * Copyright 2001-2005 The Apache Software Foundation.
-
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +53,7 @@ public class ColaCompileMojo extends BaseColaMojo {
                 project.getTestClasspathElements(), includes, excludes, deltas);
 
             try (final URLClassLoader classLoader = provider.getTargetClassLoader()) {
-                final ColaMain main = new ColaMain(ideBaseClass, ideBaseClassTest);
+                final ColaMain main = new ColaMain(ideBaseClass, ideTestMethod);
                 main.execute(provider);
             }
         } catch (final Throwable t) {

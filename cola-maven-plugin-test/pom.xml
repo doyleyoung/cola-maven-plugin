@@ -99,7 +99,7 @@
                 <version>${project.version}</version>
                 <configuration>
                     <ideBaseClass>com.github.bmsantos.maven.cola.BaseColaTest</ideBaseClass>
-                    <ideBaseClassTest>iWillBeRemoved</ideBaseClassTest>
+                    <ideTestMethod>iWillBeRemoved</ideTestMethod>
                     <includes>
                         <include>**/*Test.class</include>
                     </includes>

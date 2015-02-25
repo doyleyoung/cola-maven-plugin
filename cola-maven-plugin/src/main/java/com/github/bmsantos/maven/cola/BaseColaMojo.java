@@ -37,18 +37,18 @@ public abstract class BaseColaMojo extends AbstractMojo {
     protected String targetTestDirectory;
 
     /**
-     * Cola Test Base Class.
+     * Base Class for IDE enabling.
      * This is required in order to allow Cola Tests to run from IDEs such as Eclipse.
      */
     @Parameter
     protected String ideBaseClass;
 
     /**
-     * Cola Test Base Class Test.
-     * The test name to be removed.
+     * Base Class Test method for IDE enabling.
+     * The JUnit test method name to be removed.
      */
     @Parameter
-    protected String ideBaseClassTest;
+    protected String ideTestMethod;
 
     /**
      * Inlude filters
