@@ -11,7 +11,7 @@ import com.github.bmsantos.core.cola.story.annotations.Given;
 import com.github.bmsantos.core.cola.story.annotations.Then;
 import com.github.bmsantos.core.cola.story.annotations.When;
 
-public class FieldColaTest extends BaseColaTest {
+public class FieldAnnotatedColaTest extends BaseColaTest {
 
     @Feature
     private final String annotatedField1 =
