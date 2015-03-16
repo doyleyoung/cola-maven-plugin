@@ -29,7 +29,6 @@ public class SkipColaTest extends BaseColaTest {
         + "When B\n"
         + "Then not executed";
 
-
     @Given("A")
     public void givenA() {
         fail(ERROR);
