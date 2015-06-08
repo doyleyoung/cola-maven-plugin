@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.github.bmsantos</groupId>
         <artifactId>cola-maven-plugin-base</artifactId>
-        <version>0.2.0-SNAPSHOT</version>
+        <version>0.2.0</version>
         <relativePath>../cola-maven-plugin-base/pom.xml</relativePath>
     </parent>
 
