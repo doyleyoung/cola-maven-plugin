@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>cola-maven-plugin-base</artifactId>
-    <version>0.3.0</version>
+    <version>0.3.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>cola-maven-plugin-base</name>
