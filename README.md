@@ -10,10 +10,6 @@ JUnit + BDD = COLA Maven Plugin
 
 COLA Test [Web Site](http://bmsantos.github.io/cola-maven-plugin/)
 
-Current version: 0.1.0
-
-Current snapshot (non-production): 0.2.0-SNAPSHOT
-
 ###Maven Setup:
 ```xml
 
