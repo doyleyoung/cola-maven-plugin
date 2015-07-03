@@ -14,7 +14,7 @@ public class AssignedColaTest extends BaseColaTest {
     @Feature
     private final String feature =
     "Feature: An example feature\n"
-        + "Scenario Outline: Should parse examples\n"
+        + "Scenario: Should parse examples\n"
         + "Given there are 50 cucumbers\n"
         + "When I eat 20 cucumbers\n"
         + "Then I should have 30 cucumbers\n";
