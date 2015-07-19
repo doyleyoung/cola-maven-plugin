@@ -53,7 +53,7 @@ public class ColaCompileMojo extends BaseColaMojo {
                 project.getTestClasspathElements(), includes, excludes, deltas);
 
             try (final URLClassLoader classLoader = provider.getTargetClassLoader()) {
-                final ColaMain main = new ColaMain(ideBaseClass, ideTestMethod);
+                final ColaMain main = new ColaMain();
                 main.execute(provider);
             }
         } catch (final Throwable t) {
