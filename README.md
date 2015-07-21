@@ -9,6 +9,7 @@ Questions? [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.
 JUnit + BDD = COLA Maven Plugin
 
 COLA Tests [Web Site](http://bmsantos.github.io/cola-maven-plugin/)
+
 COLA Tests [Wiki](https://github.com/bmsantos/cola-tests/wiki)
 
 ###Maven Setup:
