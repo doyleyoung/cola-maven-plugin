@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.github.bmsantos</groupId>
         <artifactId>cola-maven-plugin-base</artifactId>
-        <version>0.4.0</version>
+        <version>0.4.1-SNAPSHOT</version>
         <relativePath>../cola-maven-plugin-base/pom.xml</relativePath>
     </parent>
 
@@ -19,7 +19,7 @@
         <dependency>
             <groupId>com.github.bmsantos</groupId>
             <artifactId>cola-tests</artifactId>
-            <version>0.4.0</version>
+            <version>0.4.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
