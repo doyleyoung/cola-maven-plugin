@@ -1,19 +1,18 @@
 package com.github.bmsantos.maven.cola;
 
-import static java.util.Arrays.asList;
-import static java.util.Objects.requireNonNull;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
-import java.util.Collection;
-
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-
 import com.github.bmsantos.core.cola.story.annotations.Feature;
 import com.github.bmsantos.core.cola.story.annotations.Given;
 import com.github.bmsantos.core.cola.story.annotations.Then;
 import com.github.bmsantos.core.cola.story.annotations.When;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import java.util.Collection;
+
+import static java.util.Arrays.asList;
+import static java.util.Objects.requireNonNull;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
 public class ParameterizedColaTest extends BaseColaTest {
@@ -29,18 +28,19 @@ public class ParameterizedColaTest extends BaseColaTest {
 
     @Parameterized.Parameters
     public static Collection<?> primeNumbers() {
-        return asList(new Object[][] {
-            { 2, true },
-            { 6, false },
-            { 19, true },
-            { 22, false },
-            { 23, true }
+        return asList(new Object[][]{
+          {2, true},
+          {6, false},
+          {19, true},
+          {22, false},
+          {23, true}
         });
     }
 
     @Feature
     private final String feature =
-    "Feature: Detect prime numbers\n"
+      "@group1\n"
+        + "Feature: Detect prime numbers\n"
         + "Scenario: Should detect prime numbers\n"
         + "Given a number\n"
         + "And a prime number guess\n"

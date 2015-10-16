@@ -22,7 +22,7 @@ public class SkipColaTest extends BaseColaTest {
 
     @Feature
     private final String skipFeatureWithoutScenarios =
-    "Feature: Skip Feature wihtout scenarios\n"
+    "Feature: Skip Feature without scenarios\n"
         + "@skip\n"
         + "Scenario: Should be skipped\n"
         + "Given A\n"

@@ -14,6 +14,7 @@ public class RegexColaTest extends BaseColaTest {
 
     private final String stories =
         "Feature: Introduce drinking\n"
+            + "@group2\n"
             + "Scenario: Should get happy\n"
             + "Given a beer to enjoy\n"
             + "When mixed with 13 other alcoholic drinks\n"
