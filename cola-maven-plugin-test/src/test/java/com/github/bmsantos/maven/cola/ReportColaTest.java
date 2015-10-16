@@ -24,8 +24,9 @@ public class ReportColaTest extends BaseColaTest {
 
     @Feature
     private final String ignoreFeature =
-    "#report> type:feature\n"
-        + "Feature: Ignore Feature\n"
+      "#report> type:feature\n"
+      + "@group1\n"
+      + "Feature: Ignore Feature\n"
         + "\n"
         + "#report> type:scenario\n"
         + "Scenario: Should ignore feature\n"

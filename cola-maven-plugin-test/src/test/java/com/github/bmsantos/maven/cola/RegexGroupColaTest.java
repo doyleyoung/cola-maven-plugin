@@ -11,7 +11,8 @@ import com.github.bmsantos.core.cola.story.annotations.When;
 public class RegexGroupColaTest extends BaseColaTest {
 
     private final String stories =
-        "Feature: Introduce drinking\n"
+        "@group2\n"
+        + "Feature: Introduce drinking\n"
             + "Scenario: Should get messy\n"
             + "Given 50 beers per 5 developers\n"
             + "When drunk in one go\n"
