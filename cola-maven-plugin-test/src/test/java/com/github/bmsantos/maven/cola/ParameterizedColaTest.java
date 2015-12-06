@@ -37,6 +37,7 @@ public class ParameterizedColaTest extends BaseColaTest {
         });
     }
 
+    // Note: When filtering out groups, Parameterized tests will fail if no @Test method exists.
     @Feature
     private final String feature =
       "@group1\n"
