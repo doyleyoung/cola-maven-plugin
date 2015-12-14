@@ -15,6 +15,10 @@
 
     <name>cola-maven-plugin</name>
 
+    <properties>
+        <additionalparam>-Xdoclint:none</additionalparam>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.github.bmsantos</groupId>
