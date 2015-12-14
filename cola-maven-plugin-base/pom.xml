@@ -5,11 +5,11 @@
     <parent>
         <groupId>com.github.bmsantos</groupId>
         <artifactId>cola-tests-base</artifactId>
-        <version>0.5.0</version>
+        <version>0.5.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>cola-maven-plugin-base</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>cola-maven-plugin-base</name>
