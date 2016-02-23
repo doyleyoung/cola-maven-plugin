@@ -21,8 +21,8 @@ import static org.junit.Assert.assertThat;
 public class ColaInjectedTest extends BaseColaTest {
 
     private final String stories =
-        "Feature: Introduce addition\n"
-            + "Scenario: Should add two numbers\n"
+        "Feature: Nine multiples rule\n"
+            + "Scenario: Should add to nine\n"
             + "Given an injected number\n"
             + "When multiplied by nine\n"
             + "Then the addition of its digits will be nine";
