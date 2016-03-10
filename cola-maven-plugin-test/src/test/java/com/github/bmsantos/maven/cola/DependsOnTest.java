@@ -1,5 +1,6 @@
 package com.github.bmsantos.maven.cola;
 
+import com.github.bmsantos.core.cola.story.annotations.Dependencies;
 import com.github.bmsantos.core.cola.story.annotations.DependsOn;
 import com.github.bmsantos.core.cola.story.annotations.Then;
 import com.github.bmsantos.core.cola.story.annotations.When;
@@ -14,7 +15,10 @@ public class DependsOnTest extends BaseColaTest {
             + "Then the result will verify";
 
     @When("state is checked")
-    @DependsOn({ExamplesColaTest.class, RegexColaTest.class})
+    @Dependencies({
+      @DependsOn(ExamplesColaTest.class),
+      @DependsOn(RegexColaTest.class)
+    })
     public void when() {
     }
 
