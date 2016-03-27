@@ -27,8 +27,6 @@ public class ColaInjectedTest extends BaseColaTest {
             + "When multiplied by nine\n"
             + "Then the addition of its digits will be nine";
 
-    public List<String> executionOrder = new ArrayList<>();
-
     @Inject
     private Integer injectedNumber;
 

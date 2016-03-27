@@ -24,11 +24,11 @@ public class ColaInjectableTest extends BaseColaTest {
     private Integer injectableNumber;
 
     @ColaInjectable("injected_string")
-    private String injectableString = "Hello COLA Test Dependency Injection!";
+    private String injectableString = "Nine multiples rule!";
 
     @Before
     public void setUp() {
-        injectableNumber = new Integer(101);
+        injectableNumber = new Integer(5);
     }
 
     @When("state is increased")
@@ -38,6 +38,6 @@ public class ColaInjectableTest extends BaseColaTest {
 
     @Then("the result will verify")
     public void then() {
-        assertThat(injectableNumber, is(102));
+        assertThat(injectableNumber, is(6));
     }
 }
